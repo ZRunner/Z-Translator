@@ -105,3 +105,9 @@ dist
 
 # MacOS weird files
 .DS_Store
+
+# VSCode files
+.vscode/
+
+# Credentials
+credentials.json

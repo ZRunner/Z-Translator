@@ -23,8 +23,11 @@
   },
   "homepage": "https://github.com/ZRunner/Z-Translator#readme",
   "dependencies": {
+    "connect-session-knex": "^1.7.3",
+    "console-stamp": "^0.2.9",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "mysql": "^2.18.1",
     "simple-git": "^2.12.0"
   }
 }
