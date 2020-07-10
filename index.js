@@ -28,7 +28,7 @@ const knex = Knex({
 });
 const store = new KnexSessionStore({
     knex,
-    tablename: 'z-translator', // optional. Defaults to 'sessions'
+    tablename: 'ztranslator', // optional. Defaults to 'sessions'
 });
 
 app.use(express.static('public'));
@@ -43,8 +43,7 @@ app.use(session({
 app.set('view engine', 'ejs')
 
 app.get("/", function (req, res) {
-    req.session.test = "123"
-    res.send(req.session.test);
+    res.render("index", { account: req.session.account, level: 0 })
 })
 
 

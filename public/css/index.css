@@ -1,0 +1,73 @@
+.jumbotron {
+    opacity: 0.9;
+    display: flex;
+    background-color: #e6ffe6;
+    padding: 1rem 2rem;
+    animation: 1s ease-out 0s 1 slideInFromLeft;
+    transition: all 400ms;
+}
+
+.jumbotron.unloaded {
+    opacity: 0;
+    animation-play-state: paused !important;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 0.9;
+        transform: translateX(0);
+    }
+}
+
+.jumbotron:hover {
+    opacity: 1;
+}
+
+.jumbotron .text {
+    flex-grow: 1;
+    flex-basis: 70%;
+    align-self: center;
+}
+
+.jumbotron .text>h4 {
+    margin: 0 1% 1%;
+}
+
+.jumbotron img {
+    flex-basis: 25%;
+    margin: 0 2%;
+}
+
+.jumbotron a {
+    margin: 2% 0 0 1%;
+    padding: 1% 2%;
+}
+
+#title {
+    margin: 3% 0 15px 5%;
+}
+
+#subtitle {
+    margin: 0 0 40px 4%;
+    color: #444;
+}
+
+#explanations {
+    margin: 0 3% 30px;
+    color: #666666;
+}
+
+@media (max-width: 768px) {
+    .jumbotron img {
+        display: none;
+    }
+    .jumbotron a {
+        margin: 0 50%;
+        transform: translateX(-50%);
+        min-width: 180px;
+    }
+}
