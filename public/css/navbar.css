@@ -1,0 +1,26 @@
+.navbar {
+    box-shadow: 0px 10px 5px -5px gray;
+}
+
+.nav-item img {
+    width: 30px;
+    margin-right: 8%;
+}
+
+.dropdown-toggle {
+    align-items: center;
+    display: flex;
+}
+
+.fade-in {
+    animation: fadeIn ease 0.4s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

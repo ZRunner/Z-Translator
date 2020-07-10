@@ -1,0 +1,44 @@
+<% var rpath = "../".repeat(level) %>
+<link rel="stylesheet" href="<%= rpath %>css/navbar.css">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="<%= rpath %>.">Z-Translator</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="<%= rpath %>">Home</a>
+                <a class="nav-item nav-link" href="<%= rpath %>about-us">About us</a>
+            </div>
+            <div class="navbar-nav">
+
+                <% if (account) { %>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Mon compte<b
+                            class="caret"></b></a>
+                    <div class="dropdown-menu fade-in">
+                        <a class="dropdown-item" href="<%= rpath %>duck-compte">Profil</a>
+                        <a class="dropdown-item" href="<%= rpath %>panier">Mon panier</a>
+                        <a class="dropdown-item" href="<%= rpath %>historique">Mes commandes</a>
+                    </div>
+                </div>
+                <button class="nav-item nav-link" onclick="disconnect(event)">Déconnexion</button>
+
+                <% } else { %>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><img src="<%= rpath %>images/profile.svg" alt="">Profile</a>
+                    <div class="dropdown-menu fade-in">
+                        <a class="dropdown-item" href="<%= rpath %>signin">Sign in</a>
+                        <a class="dropdown-item" href="<%= rpath %>signup">Sign up</a>
+                    </div>
+                </div>
+
+                <% } %>
+            </div>
+        </div>
+    </div>
+</nav>
