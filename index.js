@@ -4,6 +4,7 @@ const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 const Knex = require('knex');
 const simpleGit = require('simple-git');
+const got = require('got');
 
 const VERSION = require('./package.json').version;
 const credentials = require('./credentials.json');
@@ -59,7 +60,7 @@ app.get("/", function (req, res) {
 })
 
 app.get("/signup", function (req, res) {
-    res.render("signup", { account: null, level: 0 });
+    res.render("signup", { account: null, github_client: credentials["github-client-id"], callback_github: null, callback_discord: null, level: 0 });
 })
 
 app.post("/signup", function (req, res) {
@@ -67,21 +68,38 @@ app.post("/signup", function (req, res) {
         res.status(422).send();
         return;
     }
+    Object.keys(req.body).forEach(function(key) {
+        if (!req.body[key]) {
+            req.body[key] = null;
+        }
+    })
     const lastInsertID = DBmanager.new_user({
         nickname: req.body.nickname,
         password: req.body.password,
         email: req.body.email,
-        'discord-id': req.body.discordid
+        'avatar-url': req.body.avatar,
+        'minecraft-name': req.body["mc-username"],
+        'minecraft-uuid': req.body["mc-uuid"],
+        'discord-id': req.body["discord-id"],
+        'github-name': req.body["github-name"]
     })
     console.log(`New user created - index ${lastInsertID}`);
     res.redirect('.');
 })
 
 app.get("/signin", function (req, res) {
+    if (req.session.account) {
+        res.redirect("user/" + req.session.account.id);
+        return;
+    }
     res.render("signin", { account: null, tried: false, level: 0 });
 })
 
 app.post("/signin", function (req, res) {
+    if (req.session.account) {
+        res.status(403).send();
+        return;
+    }
     if (!req.body.email || !req.body.password) {
         res.status(422).send();
         return;
@@ -100,6 +118,41 @@ app.get("/logout", function (req, res) {
     if (req.session.account) console.log(`Logout - user ${req.session.account.id}`);
     req.session.account = null;
     res.redirect(".")
+})
+
+
+
+
+// ----- API PART ----- //
+
+app.post("/minecraft-signup", function (req, res) {
+    if (!req.body.username || !req.body.password) {
+        res.status(422).send();
+        return;
+    }
+    const mc_url = "https://authserver.mojang.com/authenticate";
+    got.post(mc_url, {
+        json: {
+            agent: { name: "Minecraft", version: 1 },
+            username: req.body.username,
+            password: req.body.password,
+            requestUser: true
+        },
+        responseType: 'json'
+    }).then(answer => {
+        const profile = answer.body.selectedProfile;
+        console.log(`Minecraft Authentification success - user ${profile.name}`);
+        const possible_email = answer.body.user.username;
+        res.status(200).json({
+            username: profile.name,
+            email: possible_email.indexOf("@")>0 ? possible_email : null,
+            minecraft_uuid: profile.id,
+            minecraft_name: profile.name
+        })
+    }).catch(err => {
+        console.warn(`Minecraft Authentification failure - ${err}`);
+        res.status(500).send(`${err}`)
+    })
 })
 
 
