@@ -15,7 +15,18 @@ class DatabaseManager {
     }
 
     new_user(data) {
-        this.db.insert('users', data);
+        return this.db.insert('users', data);
+    }
+
+    connect_user(email, password) {
+        let account = DB().queryFirstRow('SELECT * FROM users WHERE email=?', email);
+        if (!account) return null;
+        console.debug(account);
+        return account.password === password ? account : null;
+    }
+
+    get_user() {
+        return null
     }
 
 }
