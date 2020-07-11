@@ -74,7 +74,32 @@ app.post("/signup", function (req, res) {
         'discord-id': req.body.discordid
     })
     console.log(`New user created - index ${lastInsertID}`);
-    res.status(200).send();
+    res.redirect('.');
+})
+
+app.get("/signin", function (req, res) {
+    res.render("signin", { account: null, tried: false, level: 0 });
+})
+
+app.post("/signin", function (req, res) {
+    if (!req.body.email || !req.body.password) {
+        res.status(422).send();
+        return;
+    }
+    let acc = DBmanager.connect_user(req.body.email, req.body.password);
+    if (acc) {
+        console.log(`New connection - user ${acc.id}`);
+        req.session.account = acc;
+        res.redirect('.');
+    } else {
+        res.render("signin", { account: null, tried: true, level: 0 });
+    }
+})
+
+app.get("/logout", function (req, res) {
+    if (req.session.account) console.log(`Logout - user ${req.session.account.id}`);
+    req.session.account = null;
+    res.redirect(".")
 })
 
 
