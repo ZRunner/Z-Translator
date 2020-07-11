@@ -112,3 +112,4 @@ dist
 # App files
 credentials.json
 repositories.json
+data/
