@@ -16,26 +16,34 @@
 #others {
     display: flex;
     flex-direction: column;
-    max-width: 300px;
+    max-width: 323px;
     width: 80%;
 }
 .signin {
     display: inline;
+    transition: all .15s ease-in-out;
+    margin: 5px 0;
 }
 
 .signin img {
     width: 30px;
+    float: left;
 }
 
 .signin#minecraft {
     background-color: #018944;
-    color: white;
+    color: whitesmoke;
 }
 
 .signin#discord {
     background-color: #7289DA;
-    color: white;
+    color: whitesmoke;
 }
 
+.signin#minecraft:enabled:hover {
+    background-color: #017f40;
+}
 
-
+.signin#discord:enabled:hover {
+    background-color: #5e77d4;
+}
