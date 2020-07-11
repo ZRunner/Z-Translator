@@ -12,6 +12,14 @@
     display: flex;
 }
 
+.nav-link > img {
+    opacity: .4;
+}
+
+.nav-link:hover > img {
+    opacity: 1;
+}
+
 .fade-in {
     animation: fadeIn ease 0.4s;
 }

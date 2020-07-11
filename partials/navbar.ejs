@@ -11,22 +11,22 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="<%= rpath %>">Home</a>
+                <a class="nav-item nav-link" href="<%= rpath %>.">Home</a>
                 <a class="nav-item nav-link" href="<%= rpath %>about-us">About us</a>
             </div>
             <div class="navbar-nav">
 
                 <% if (account) { %>
+                <a href="<%= rpath %>dashboard" class="nav-link">Dashboard</a>
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Mon compte<b
-                            class="caret"></b></a>
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><img src="<%= rpath %>images/profile.svg" alt=""><%= account.nickname %></a>
                     <div class="dropdown-menu fade-in">
-                        <a class="dropdown-item" href="<%= rpath %>duck-compte">Profil</a>
-                        <a class="dropdown-item" href="<%= rpath %>panier">Mon panier</a>
-                        <a class="dropdown-item" href="<%= rpath %>historique">Mes commandes</a>
+                        <a class="nav-link" href="<%= rpath %>user/<%= account.id %>">Profile</a>
+                        <a class="nav-link" href="<%= rpath %>settings">Settings</a>
+                        <a class="nav-link" href="<%= rpath %>logout">Log Out</a>
                     </div>
                 </div>
-                <button class="nav-item nav-link" onclick="disconnect(event)">Déconnexion</button>
+                
 
                 <% } else { %>
                 <div class="nav-item dropdown">
