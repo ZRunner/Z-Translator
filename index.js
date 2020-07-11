@@ -68,7 +68,7 @@ app.post("/signup", function (req, res) {
         res.status(422).send();
         return;
     }
-    Object.keys(req.body).forEach(function(key) {
+    Object.keys(req.body).forEach(function (key) {
         if (!req.body[key]) {
             req.body[key] = null;
         }
@@ -145,7 +145,7 @@ app.post("/minecraft-signup", function (req, res) {
         const possible_email = answer.body.user.username;
         res.status(200).json({
             username: profile.name,
-            email: possible_email.indexOf("@")>0 ? possible_email : null,
+            email: possible_email.indexOf("@") > 0 ? possible_email : null,
             minecraft_uuid: profile.id,
             minecraft_name: profile.name
         })
@@ -155,6 +155,40 @@ app.post("/minecraft-signup", function (req, res) {
     })
 })
 
+app.post("/github-callback", function (req, res) {
+    if (!req.query.code) {
+        res.status(422).send();
+        return;
+    }
+    // 0134f5f36457c5bc65b9
+    got.post("https://github.com/login/oauth/access_token", {
+        json: {
+            "client_id": credentials["github-client-id"],
+            "client_secret": credentials["github-client-secret"],
+            "code": req.query.code,
+            "accept": "json"
+        },
+        responseType: 'json'
+    }).then(answer => {
+        // access_token=301a2bcc39e4b013ee9a86ef9155da3101a2fb93&scope=read%3Auser%2Cuser%3Aemail&token_type=bearer
+        const auth = answer.body.access_token;
+        console.debug(answer);
+        const scopes = answer.body.scopes.split(',');
+        if (!scopes.includes('read:user')) {
+            res.status(202).send();
+            return;
+        }
+        got("https://api.github.com/user", {
+            headers: { token: auth }
+        }).then(answer => {
+            console.debug(answer);
+            console.log(`GitHub Authentification success - user ${null}`);
+            res.status(202).send();
+        })
+    }).catch(err => {
+        console.warn(`GitHub Authentification failure - ${err}`);
+    })
+})
 
 
 app.listen(PORT_USED, function () {
