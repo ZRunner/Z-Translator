@@ -1,0 +1,35 @@
+<html lang="en">
+
+<head>
+    <%- include('../partials/head') %>
+    <title>Z-Translator - Sign up</title>
+    <link rel="stylesheet" href="css/signup.css">
+    <script src="scripts/signup.js"></script>
+</head>
+
+<body onload="main()">
+    <%- include('../partials/navbar') %>
+
+    <h2 id="title">Sign Up</h2>
+
+    <div class="jumbotron">
+        <form action="" method="POST">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required>
+            <label for="nickname">Username</label>
+            <input type="text" name="nickname" id="nickname" maxlength="50" required>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" minlength="8" maxlength="64" required>
+            <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+        <h3>OR</h3>
+        <div id="others">
+            <button id="minecraft" class="btn signin"><img src="images/minecraft.png" alt=""> Sign in with Minecraft</button>
+            <button id="discord" class="btn signin" disabled><img src="images/discord-white.svg" alt=""> Sign in with Discord</button>
+            <button id="github" class="btn btn-dark signin" disabled><img src="images/github.png" alt="">Sign in with GitHub</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

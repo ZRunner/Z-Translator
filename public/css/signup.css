@@ -1,0 +1,41 @@
+#title {
+    margin: 3% 0 25px 5%;
+}
+
+.jumbotron {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   }
+   
+.jumbotron>form {
+    display: flex;
+    flex-direction: column;
+}
+
+#others {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    width: 80%;
+}
+.signin {
+    display: inline;
+}
+
+.signin img {
+    width: 30px;
+}
+
+.signin#minecraft {
+    background-color: #018944;
+    color: white;
+}
+
+.signin#discord {
+    background-color: #7289DA;
+    color: white;
+}
+
+
+

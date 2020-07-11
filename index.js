@@ -7,6 +7,11 @@ const simpleGit = require('simple-git');
 
 const VERSION = require('./package.json').version;
 const credentials = require('./credentials.json');
+const DatabaseManager = require('./db-manager').DatabaseManager;
+
+const PORT_USED = 3200;
+
+const app = express();
 
 // add timestamps in front of log messages 
 require('console-stamp')(console, {
@@ -18,9 +23,12 @@ require('console-stamp')(console, {
     }
 });
 
-const app = express();
 
-const PORT_USED = 3200;
+// databases
+
+// const DBaccounts = new Database('database/accounts.db', { verbose: console.log });
+const DBmanager = new DatabaseManager();
+process.on('exit', () => DBmanager.close());
 
 const knex = Knex({
     client: 'mysql',
@@ -30,6 +38,8 @@ const store = new KnexSessionStore({
     knex,
     tablename: 'ztranslator', // optional. Defaults to 'sessions'
 });
+
+// express settings
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,9 +52,31 @@ app.use(session({
 }))
 app.set('view engine', 'ejs')
 
+
+
 app.get("/", function (req, res) {
     res.render("index", { account: req.session.account, level: 0 })
 })
+
+app.get("/signup", function (req, res) {
+    res.render("signup", { account: null, level: 0 });
+})
+
+app.post("/signup", function (req, res) {
+    if (!req.body.nickname || !req.body.password || !req.body.email) {
+        res.status(422).send();
+        return;
+    }
+    const lastInsertID = DBmanager.new_user({
+        nickname: req.body.nickname,
+        password: req.body.password,
+        email: req.body.email,
+        'discord-id': req.body.discordid
+    })
+    console.log(`New user created - index ${lastInsertID}`);
+    res.status(200).send();
+})
+
 
 
 app.listen(PORT_USED, function () {
