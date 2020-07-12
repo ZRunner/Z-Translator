@@ -33,14 +33,14 @@ jobs:
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
           # username
-          username: github
+          username: 'github'
           # your sftp server
-          server: 137.74.246.110
+          server: '137.74.246.110'
           # your sftp server port, default to 22
-          port: 22 # default is 22
+          # port: 22 # default is 22
           # you can copy private_key from your *.pem file, keep format
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           # will put all file under this path
-          local_path: ./* # default is ./*
+          local_path: './*' # default is ./*
           # files will copy to under remote_path
-          remote_path: z-translator/ # default is /
+          remote_path: 'z-translator/' # default is /
