@@ -84,6 +84,7 @@ app.post("/signup", function (req, res) {
         'github-name': req.body["github-name"]
     })
     console.log(`New user created - index ${lastInsertID}`);
+    req.session.account = DBmanager.get_user_by_id(lastInsertID);
     res.redirect('.');
 })
 
