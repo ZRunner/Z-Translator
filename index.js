@@ -120,6 +120,14 @@ app.get("/logout", function (req, res) {
     res.redirect(".")
 })
 
+app.get("/dashboard", function (req, res) {
+    if (!req.session.account) {
+        res.redirect("signin");
+        return;
+    }
+    res.render("dashboard", { account: req.session.account, level: 0 })
+})
+
 
 
 

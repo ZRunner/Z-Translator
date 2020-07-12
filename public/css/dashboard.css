@@ -1,0 +1,9 @@
+#title {
+    margin: 3% 0 15px 5%;
+}
+
+.jumbotron {
+    display: flex;
+    background-color: #e6ffe6;
+    padding: 1rem 2rem;
+}
