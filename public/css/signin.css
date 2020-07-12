@@ -2,12 +2,16 @@
     margin: 3% 0 25px 5%;
 }
 
+#signup {
+    margin-left: 2%;
+}
+
 .jumbotron {
     display: flex;
     flex-direction: column;
     align-items: center;
-   }
-   
+}
+
 .jumbotron>form {
     display: flex;
     flex-direction: column;
