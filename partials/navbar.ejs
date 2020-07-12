@@ -19,7 +19,7 @@
                 <% if (account) { %>
                 <a href="<%= rpath %>dashboard" class="nav-link">Dashboard</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><img src="<%= rpath %>images/profile.svg" alt=""><%= account.nickname %></a>
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><img <%= account["avatar-url"] ? `src=${account["avatar-url"]} class=custom` : `src=${rpath}images/profile.svg`%> alt="" id="user-avatar"><%= account.nickname %></a>
                     <div class="dropdown-menu fade-in">
                         <a class="nav-link" href="<%= rpath %>user/<%= account.id %>">Profile</a>
                         <a class="nav-link" href="<%= rpath %>settings">Settings</a>

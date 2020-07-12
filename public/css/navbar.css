@@ -20,6 +20,11 @@
     opacity: 1;
 }
 
+#user-avatar.custom {
+    opacity: 1;
+    border-radius: 50%;
+}
+
 .fade-in {
     animation: fadeIn ease 0.4s;
 }
