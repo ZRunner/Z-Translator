@@ -38,16 +38,24 @@ class DatabaseManager {
         return this.db.query('SELECT * FROM projects WHERE owner=?', userid)
     }
 
-    get_projects(id) {
+    get_projects({ id = null, owner = null }) {
         if (id != null) {
-            let project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=?', id);
+            let project = null;
+            if (owner === null)
+                project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=?', id);
+            else
+                project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=? AND owner=?', id, owner);
             if (!project) return;
             if (!project['settings-path']) return project;
             let rawdata = fs.readFileSync(this.repositories_path + '/' + project['git-path'] + '/' + project['settings-path']);
             let jsondata = JSON.parse(rawdata);
             return { ...project, ...jsondata }
         }
-        const projects = this.db.query('SELECT * FROM projects');
+        let projects = []
+        if (owner === null)
+            projects = this.db.query('SELECT * FROM projects');
+        else
+            projects = this.db.query('SELECT * FROM projects WHERE owner=?', owner);
         let results = new Array();
         for (const proj of projects) {
             if (!proj['settings-path']) {
