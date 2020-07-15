@@ -1,5 +1,5 @@
 -- Up 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `nickname` VARCHAR(50) NOT NULL,
   `password` TEXT NOT NULL,
@@ -10,10 +10,10 @@ CREATE TABLE `users` (
   `discord-id` BIGINT UNIQUE,
   `github-name` TEXT UNIQUE
 );
-CREATE UNIQUE INDEX idx_accounts_email ON `users` (`email`);
-CREATE INDEX idx_accounts_nickname ON `users` (`nickname`);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_accounts_email ON `users` (`email`);
+CREATE INDEX IF NOT EXISTS idx_accounts_nickname ON `users` (`nickname`);
 
-CREATE TABLE `projects` (
+CREATE TABLE IF NOT EXISTS `projects` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `description` TEXT,
@@ -24,8 +24,8 @@ CREATE TABLE `projects` (
   `last-commit` TEXT,
   `settings-path` TEXT
 );
-CREATE UNIQUE INDEX idx_accounts_email ON `projects` (`name`);
-CREATE INDEX idx_accounts_nickname ON `projects` (`owner`);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_projects_name ON `projects` (`name`);
+CREATE INDEX IF NOT EXISTS idx_projects_owner ON `projects` (`owner`);
  
 -- Down 
-DROP TABLE IF EXISTS `users`;
+-- DROP TABLE IF EXISTS `users`;

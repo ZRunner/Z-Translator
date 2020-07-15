@@ -1,8 +1,12 @@
 const DB = require('better-sqlite3-helper');
+const simpleGit = require('simple-git');
+const fs = require('fs');
 
 class DatabaseManager {
     constructor() {
-        this.db = DB()
+        this.db = DB({
+            migrate: { force: 'last' }
+        })
     }
 
     close() {
@@ -27,6 +31,28 @@ class DatabaseManager {
 
     get_user_by_id(id) {
         return this.db.queryFirstRow('SELECT * FROM users WHERE id=?', id)
+    }
+
+    get_owned_projects(userid) {
+        return this.db.query('SELECT * FROM projects WHERE owner=?', userid)
+    }
+
+    get_local_projects(id) {
+        if (id != null) {
+            const project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=?', id);
+            if (!project) return;
+            let rawdata = fs.readFileSync(project['git-path']+'/'+project['settings-path']);
+            let jsondata = JSON.parse(rawdata);
+            return new Map([...project, ...jsondata]);
+        }
+        const projects = this.db.query('SELECT * FROM projects');
+        let results = new Array();
+        for (const proj of projects) {
+            let rawdata = fs.readFileSync(proj['git-path']+'/'+proj['settings-path']);
+            let jsondata = JSON.parse(rawdata);
+            results.push(new Map([...project, ...jsondata]));
+        }
+        return results;
     }
 
 }
