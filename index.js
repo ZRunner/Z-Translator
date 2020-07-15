@@ -169,7 +169,6 @@ app.post("/github-callback", function (req, res) {
         res.status(422).send();
         return;
     }
-    // 0134f5f36457c5bc65b9
     got.post("https://github.com/login/oauth/access_token", {
         json: {
             "client_id": credentials["github-client-id"],
@@ -179,7 +178,6 @@ app.post("/github-callback", function (req, res) {
         },
         responseType: 'json'
     }).then(answer => {
-        // access_token=301a2bcc39e4b013ee9a86ef9155da3101a2fb93&scope=read%3Auser%2Cuser%3Aemail&token_type=bearer
         const auth = answer.body.access_token;
         console.debug(answer);
         const scopes = answer.body.scopes.split(',');
