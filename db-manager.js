@@ -4,6 +4,7 @@ const fs = require('fs');
 
 class DatabaseManager {
     constructor() {
+        this.repositories_path = "./repositories";
         this.db = DB({
             migrate: { force: 'last' }
         })
@@ -41,18 +42,40 @@ class DatabaseManager {
         if (id != null) {
             const project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=?', id);
             if (!project) return;
-            let rawdata = fs.readFileSync(project['git-path']+'/'+project['settings-path']);
+            let rawdata = fs.readFileSync(this.repositories_path + '/' + project['git-path'] + '/' + project['settings-path']);
             let jsondata = JSON.parse(rawdata);
             return new Map([...project, ...jsondata]);
         }
         const projects = this.db.query('SELECT * FROM projects');
         let results = new Array();
         for (const proj of projects) {
-            let rawdata = fs.readFileSync(proj['git-path']+'/'+proj['settings-path']);
+            let rawdata = fs.readFileSync(this.repositories_path + '/' + proj['git-path'] + '/' + proj['settings-path']);
             let jsondata = JSON.parse(rawdata);
             results.push(new Map([...project, ...jsondata]));
         }
         return results;
+    }
+
+    create_project(data) {
+        let path = null;
+        if (data["git-path"])
+            path = data["git-path"];
+        else
+            data["git-path"] = "pending";
+        try {
+            var res = this.db.insert('projects', data);
+        } catch (err) {
+            if (err.code == 'SQLITE_CONSTRAINT_UNIQUE') return;
+            console.error(err);
+            return;
+        }
+        if (!path) {
+            path = "project-" + res;
+            this.db.update('projects', { 'git-path': path }, { id: res });
+        }
+        const git = simpleGit('./repositories');
+        git.clone(data['git-url'], path);
+        return res
     }
 
 }
