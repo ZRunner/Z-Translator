@@ -4,6 +4,30 @@
 
 .jumbotron {
     display: flex;
+    flex-direction: column;
     background-color: #e6ffe6;
     padding: 1rem 2rem;
+}
+
+.container {
+    margin-left: 0
+}
+
+.card-img-top {
+    height: 200px;
+    background-color: gray;
+}
+
+.card-img-top>svg {
+    background-color: whitesmoke;
+    width: 100%;
+    height: 100%;
+}
+
+#create {
+    fill: cadetblue;
+}
+
+#join {
+    fill: yellowgreen;
 }

@@ -13,10 +13,63 @@
 
     <div class="jumbotron">
         <h4>Your Projects</h4>
+        <div class="container">
+            <div class="row" id="products-list">
+                <% owned.forEach(project => { %>
+                <div class="col-md-4">
+                    <div class="card md-4 shadow-sm project owned">
+                        <img class="card-img-top" src="<%= project['icon-url'] %>">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= project['name'] %></h5>
+                            <p class="card-text"><%= project['description'] || "No description available" %></p>
+                            <a href="<%= "project/"+project['id'] %>" class="btn btn-primary">Visit</a>
+                            <a href="<%= "edit-project/"+project['id'] %>" class="btn btn-secondary">Edit</a>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+                <div class="col-md-4">
+                    <div class="card md-4 project owned">
+                        <div class="card-img-top" id="create"><%- include('../partials/add_circle') %></div>
+                        <div class="card-body">
+                            <h5 class="card-title">New project</h5>
+                            <p class="card-text">Create a new project from a git repository</p>
+                            <a href="create-project" class="btn btn-primary">Create</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="jumbotron">
         <h4>Projects joined</h4>
+        <div class="container">
+            <div class="row" id="products-list">
+                <% joined.forEach(project => { %>
+                <div class="col-md-4">
+                    <div class="card md-4 shadow-sm project owned">
+                        <img class="card-img-top" src="<%= project['icon-url'] %>">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= project['name'] %></h5>
+                            <p class="card-text"><%= project['description'] || "No description available" %></p>
+                            <a href="<%= "project/"+project['id'] %>" class="btn btn-primary">Visit</a>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+                <div class="col-md-4">
+                    <div class="card md-4 project owned">
+                        <div class="card-img-top" id="join"><%- include('../partials/add_circle') %></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Join a project</h5>
+                            <p class="card-text">Join an existing project from an invite url or the public list</p>
+                            <a href="public-projects" class="btn btn-primary">Join</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>

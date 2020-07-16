@@ -126,7 +126,8 @@ app.get("/dashboard", function (req, res) {
         res.redirect("signin");
         return;
     }
-    res.render("dashboard", { account: req.session.account, level: 0 })
+    const projects = DBmanager.get_projects({ owner: req.session.account.id });
+    res.render("dashboard", { account: req.session.account, owned: projects, joined: [], level: 0 })
 })
 
 
