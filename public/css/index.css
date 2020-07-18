@@ -17,6 +17,9 @@
         opacity: 0;
         transform: translateX(-100%);
     }
+    50% {
+        opacity: 0.4;
+    }
     100% {
         opacity: 0.9;
         transform: translateX(0);
