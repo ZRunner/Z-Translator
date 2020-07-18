@@ -1,0 +1,67 @@
+<html lang="en">
+
+<head>
+    <%- include('../partials/head') %>
+    <title>Z-Translator - Project Creation</title>
+    <link rel="stylesheet" href="css/project-creation.css">
+    <script src="scripts/project-creation.js"></script>
+</head>
+
+<body onload="main()">
+    <%- include('../partials/navbar') %>
+
+    <h1 id="title">Create a Project</h1>
+
+    <% if (account['github-name']) { %>
+    <div class="jumbotron">
+        <form class="form-group" onsubmit="sendform(event)">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" id="name" maxlength="50" required>
+            <label for="desc">Description</label>
+            <input type="text" class="form-control" name="desc" id="desc" maxlength="500">
+            <label for="settings">Relative path to settings file</label>
+            <input type="text" class="form-control" name="settings" id="settings" maxlength="150" pattern="^(.+)\/([^/]+).json$" placeholder="./settings.json" required>
+            <label for="url">GitHub url</label>
+            <input type="url" class="form-control" name="url" id="url" size=60 readonly>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </form>
+    </div>
+
+    <div class="modal" id="selectModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selectModalLabel">Select a repository</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="repoFormSelect">Select one of your GitHub repositories to start working with:</label>
+                        <select class="form-control" id="repoFormSelect">
+                            <% repos.forEach(elem => { %>
+                                <option><%= elem.name %></option>
+                            <% }) %> 
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="selected(event)">Validate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center" id="loading-mask" hidden>
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    <% } else { %>
+    <div id="unlogged">
+        <h4>You first need to connect your GitHub account!</h4>
+        <a href="user/<%= account.id %>">Edit my account</a>
+    </div>
+    <% } %>
+
+</body>
+
+</html>

@@ -130,6 +130,29 @@ app.get("/dashboard", function (req, res) {
     res.render("dashboard", { account: req.session.account, owned: projects, joined: [], level: 0 })
 })
 
+app.get("/project-creation", function (req, res) {
+    if (!req.session.account) {
+        res.redirect("signin");
+        return;
+    }
+    if (req.session.account['github-name']) {
+        got(`https://api.github.com/users/${req.session.account['github-name']}/repos`, { responseType: 'json' })
+            .then(answer => {
+                let repos = new Array;
+                for (const elem of answer.body) {
+                    repos.push({
+                        name: elem.name,
+                        id: elem.id
+                    })
+                }
+                res.render("project-creation", { account: req.session.account, repos: repos, level: 0 })
+            })
+    } else {
+        res.render("project-creation", { account: req.session.account, repos: [], level: 0 })
+    }
+})
+
+
 
 
 
@@ -196,6 +219,53 @@ app.post("/github-callback", function (req, res) {
     }).catch(err => {
         console.warn(`GitHub Authentification failure - ${err}`);
     })
+})
+
+app.get('/gitrepo/:id', function (req, res) {
+    if (!req.session.account) {
+        res.status(401).send();
+        return;
+    }
+    if (!req.session.account['github-name']) {
+        res.status(403).send("No GitHub account linked to the current account");
+        return;
+    }
+    console.log(`GitHub repo info asked - ${req.session.account['github-name']}/${req.params.id}`);
+    got(`https://api.github.com/repos/${req.session.account['github-name']}/${req.params.id}`, { responseType: 'json' })
+        .then(answer => {
+            answer = answer.body;
+            res.json({
+                name: answer.name,
+                description: answer.description,
+                url: answer.html_url,
+                owner_name: answer.owner.login,
+                owner_id: answer.owner.id
+            })
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send();
+        });
+})
+
+app.post("/project-creation", function (req, res) {
+    if (!req.session.account) {
+        res.redirect("signin");
+        return;
+    };
+    if (!req.body.name || !req.body.desc || !req.body.settings || !req.body.url) {
+        res.status(422).send("Missing parameter(s)");
+        return;
+    };
+    console.log(`New project created - user ${req.session.account.id} - ${req.body.url}`);
+    req.body.settings = req.body.settings.replace(/^\./, '');
+    const projectid = DBmanager.create_project({
+        'name': req.body.name,
+        'description': req.body.desc,
+        'owner': req.session.account.id,
+        'git-url': req.body.url,
+        'settings-path': req.body.settings
+    })
+    res.json({ 'project-id': projectid })
 })
 
 
