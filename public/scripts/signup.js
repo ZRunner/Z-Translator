@@ -8,7 +8,6 @@ function open_minecraft() {
 function asubmit(event) {
     event.preventDefault();
     event.stopPropagation();
-    console.debug("HI");
     data = {
         username: document.getElementById("modal-username").value,
         password: document.getElementById("modal-password").value,
