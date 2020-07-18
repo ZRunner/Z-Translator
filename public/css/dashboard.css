@@ -24,6 +24,12 @@
     height: 100%;
 }
 
+.card-title svg {
+    fill: red;
+    width: 30px;
+    height: 30px;
+}
+
 #create {
     fill: cadetblue;
 }

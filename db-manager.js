@@ -62,8 +62,14 @@ class DatabaseManager {
                 results.push(proj);
                 break;
             }
-            let rawdata = fs.readFileSync(this.repositories_path + '/' + proj['git-path'] + '/' + proj['settings-path']);
-            let jsondata = JSON.parse(rawdata);
+            let jsondata;
+            try {
+                let rawdata = fs.readFileSync(this.repositories_path + '/' + proj['git-path'] + '/' + proj['settings-path']);
+                jsondata = JSON.parse(rawdata);
+            } catch (err) {
+                if (err.code !== 'ENOENT') console.error(err.code, err);
+                jsondata = {};
+            }
             results.push({ ...proj, ...jsondata });
         }
         return results;
