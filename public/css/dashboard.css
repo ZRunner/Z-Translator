@@ -9,7 +9,7 @@
     padding: 1rem 2rem;
 }
 
-.container {
+.jumbotron>.container {
     margin-left: 0
 }
 
