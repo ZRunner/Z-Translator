@@ -22,11 +22,12 @@
                         <div class="card-body">
                             <h5 class="card-title">
                                 <% if (!project["files-path"]) { %>
-                                    <%- include('../partials/report_problem') %>
+                                <%- include('../partials/report_problem') %>
                                 <% } %>
                                 <%= project['name'] %></h5>
                             <p class="card-text"><%= project['description'] || "No description available" %></p>
-                            <a href="<%= "project/"+project['id'] %>" class="btn btn-primary">Visit</a>
+                            <a href="<%= "project/"+project['id'] %>"
+                                class="btn btn-primary <%= project["files-path"] ? "" : "disabled" %>">Visit</a>
                             <a href="<%= "edit-project/"+project['id'] %>" class="btn btn-secondary">Edit</a>
                         </div>
                     </div>
@@ -57,8 +58,8 @@
                         <div class="card-body">
                             <h5 class="card-title"><%= project['name'] %></h5>
                             <p class="card-text"><%= project['description'] || "No description available" %></p>
-                            <a href="<%= "project/"+project['id'] %>" class="btn btn-primary"
-                                <%= project["files-path"] ? "" : "disabled" %>>Visit</a>
+                            <a href="<%= "project/"+project['id'] %>"
+                                class="btn btn-primary <%= project["files-path"] ? "" : "disabled" %>">Visit</a>
                         </div>
                     </div>
                 </div>
