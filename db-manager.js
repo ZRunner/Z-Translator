@@ -47,8 +47,14 @@ class DatabaseManager {
                 project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=? AND owner=?', id, owner);
             if (!project) return;
             if (!project['settings-path']) return project;
-            let rawdata = fs.readFileSync(this.repositories_path + '/' + project['git-path'] + '/' + project['settings-path']);
-            let jsondata = JSON.parse(rawdata);
+            let jsondata = { valid: true };
+            try {
+                let rawdata = fs.readFileSync(this.repositories_path + '/' + project['git-path'] + '/' + project['settings-path']);
+                jsondata = JSON.parse(rawdata);
+            } catch (err) {
+                if (err.code !== 'ENOENT') console.error(err.code, err);
+                jsondata.valid = false;
+            }
             return { ...project, ...jsondata }
         }
         let projects = []
@@ -62,13 +68,13 @@ class DatabaseManager {
                 results.push(proj);
                 break;
             }
-            let jsondata;
+            let jsondata = { valid: true };;
             try {
                 let rawdata = fs.readFileSync(this.repositories_path + '/' + proj['git-path'] + '/' + proj['settings-path']);
                 jsondata = JSON.parse(rawdata);
             } catch (err) {
                 if (err.code !== 'ENOENT') console.error(err.code, err);
-                jsondata = {};
+                jsondata.valid = false;
             }
             results.push({ ...proj, ...jsondata });
         }
