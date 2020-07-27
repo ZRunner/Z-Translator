@@ -47,10 +47,11 @@ class DatabaseManager {
                 project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=? AND owner=?', id, owner);
             if (!project) return;
             if (!project['settings-path']) return project;
+            project['settings-path'] = project['settings-path'].replace(/^\.\//, '');
             let jsondata = { valid: true };
             try {
                 let rawdata = fs.readFileSync(this.repositories_path + '/' + project['git-path'] + '/' + project['settings-path']);
-                jsondata = JSON.parse(rawdata);
+                jsondata = { ...jsondata, ...JSON.parse(rawdata) };
             } catch (err) {
                 if (err.code !== 'ENOENT') console.error(err.code, err);
                 jsondata.valid = false;
@@ -101,6 +102,10 @@ class DatabaseManager {
         const git = simpleGit('./repositories');
         git.clone(data['git-url'], path);
         return res
+    }
+
+    edit_project(id, data) {
+        return this.db.update('projects', data, { id: id });
     }
 
 }
