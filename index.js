@@ -152,6 +152,14 @@ app.get("/project-creation", function (req, res) {
     }
 })
 
+app.get("/edit-project/:id", function (req, res) {
+    if (!req.session.account) {
+        res.redirect("/signin");
+        return;
+    }
+    const project = DBmanager.get_projects({ owner: req.session.account.id, id: req.params.id });
+    res.render("project-edition", { account: req.session.account, project: project, level: 1 })
+})
 
 
 
@@ -257,7 +265,7 @@ app.post("/project-creation", function (req, res) {
         return;
     };
     console.log(`New project created - user ${req.session.account.id} - ${req.body.url}`);
-    req.body.settings = req.body.settings.replace(/^\./, '');
+    req.body.settings = req.body.settings;
     const projectid = DBmanager.create_project({
         'name': req.body.name,
         'description': req.body.desc,
@@ -266,6 +274,30 @@ app.post("/project-creation", function (req, res) {
         'settings-path': req.body.settings
     })
     res.json({ 'project-id': projectid })
+})
+
+app.post("/edit-project/:id", function (req, res) {
+    if (!req.session.account) {
+        res.status(401).send();
+        return;
+    };
+    if (isNaN(req.params.id)) {
+        res.status(404).send("Project not found");
+        return;
+    }
+    if (!req.body.name || !req.body.desc || !req.body.settings) {
+        res.status(422).send("Missing parameter(s)");
+        return;
+    };
+    console.log(`Project edition - project ${req.params.id}`);
+    const data = {
+        name: req.body.name,
+        description: req.body.desc,
+        'settings-path': req.body.settings
+    };
+
+    DBmanager.edit_project(req.params.id, data);
+    res.status(200).send();
 })
 
 

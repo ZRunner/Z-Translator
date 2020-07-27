@@ -1,0 +1,64 @@
+<html lang="en">
+
+<head>
+    <%- include('../partials/head') %>
+    <title>Z-Translator - Project Edition</title>
+    <link rel="stylesheet" href="../css/project-edition.css">
+    <script src="../scripts/project-edition.js"></script>
+</head>
+
+<body>
+    <%- include('../partials/navbar') %>
+
+    <h1 id="title">Settings - <%= project.name %> </h1>
+
+    <div class="jumbotron">
+        <h4>Local settings</h4>
+        <%= JSON.stringify(project) %>
+        <form id="local_settings" onsubmit="update(event)">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control" value="<%= project.name %>" maxlength="50" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="desc">Description</label>
+                <input type="text" id="desc" class="form-control" value="<%= project.description %>" maxlength="500" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="settings">Settings file path</label>
+                <input type="text" id="settings" class="form-control" value="<%= project['settings-path'] %>" maxlength="150" pattern="^(.+)\/([^/]+).json$" placeholder="./settings.json"  required readonly>
+            </div>
+            <button type="submit" id="save-s-btn" class="btn btn-primary" hidden>Save</button>
+            <button id="edit-s-btn" class="btn btn-secondary" onclick="edit(event)">Edit settings</button>
+        </form>
+    </div>
+
+    <div class="jumbotron">
+        <h4>Remote settings</h4>
+        <small>These settings are stored in your Git repository.</small>
+        <% if (!project.valid) { %>
+            <p id="invalid"><b>Unable to fetch settings.</b> Please make sure your settings file is correctly in local settings.</p>
+        <% } else { %>
+            <div class="form-group">
+                <label for="name">Files path</label>
+                <input type="text" id="name" class="form-control" value="<%= project['files-path'] %>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name">Ignored files</label>
+                <input type="text" id="name" class="form-control" value="<%= project['ignored-files'] %>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name">Public project</label>
+                <input type="text" id="name" class="form-control" value="<%= project['public'] %>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name">Icon URL</label>
+                <input type="url" id="name" class="form-control" value="<%= project['icon-url'] %>" readonly>
+            </div>
+        <% } %> 
+    </div>
+
+
+</body>
+
+</html>
