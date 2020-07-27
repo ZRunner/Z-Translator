@@ -72,7 +72,7 @@ class DatabaseManager {
             let jsondata = { valid: true };;
             try {
                 let rawdata = fs.readFileSync(this.repositories_path + '/' + proj['git-path'] + '/' + proj['settings-path']);
-                jsondata = JSON.parse(rawdata);
+                jsondata = { ...jsondata, ...JSON.parse(rawdata) };
             } catch (err) {
                 if (err.code !== 'ENOENT') console.error(err.code, err);
                 jsondata.valid = false;
