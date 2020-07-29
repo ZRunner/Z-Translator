@@ -1,12 +1,3 @@
 {
-    "files-path": "",
-    "ignored-files": [],
-    "public": false,
-    "icon-url": "",
-    "authentification": {
-        "discord-ids": [],
-        "minecraft-names": [],
-        "minecraft-uuids": [],
-        "internal-names": []
-    }
+    "ignored-files": []
 }

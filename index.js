@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 const Knex = require('knex');
-const simpleGit = require('simple-git');
 const got = require('got');
 
 const VERSION = require('./package.json').version;
@@ -50,7 +49,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: store
-}))
+}));
+var expressWs = require('express-ws')(app);
 app.set('view engine', 'ejs')
 
 
@@ -161,6 +161,14 @@ app.get("/edit-project/:id", function (req, res) {
     res.render("project-edition", { account: req.session.account, project: project, level: 1 })
 })
 
+app.get("/project/:id", function (req, res) {
+    if (!req.session.account) {
+        res.redirect("/signin");
+        return;
+    }
+    const project = DBmanager.get_projects({ id: req.params.id });
+    res.render("project", { account: req.session.account, project: project, level: 1 });
+})
 
 
 
@@ -260,7 +268,7 @@ app.post("/project-creation", function (req, res) {
         res.redirect("signin");
         return;
     };
-    if (!req.body.name || !req.body.desc || !req.body.settings || !req.body.url) {
+    if (!req.body.name || !req.body.desc || !req.body.url || !req.body.settings) {
         res.status(422).send("Missing parameter(s)");
         return;
     };
@@ -269,9 +277,12 @@ app.post("/project-creation", function (req, res) {
     const projectid = DBmanager.create_project({
         'name': req.body.name,
         'description': req.body.desc,
+        'public': req.body.public ? 1 : 0,
         'owner': req.session.account.id,
         'git-url': req.body.url,
-        'settings-path': req.body.settings
+        'settings-path': req.body.settings,
+        'files-path': req.body.languages || './',
+        'icon-url': req.body.icon || null
     })
     res.json({ 'project-id': projectid })
 })
@@ -293,7 +304,10 @@ app.post("/edit-project/:id", function (req, res) {
     const data = {
         name: req.body.name,
         description: req.body.desc,
-        'settings-path': req.body.settings
+        'settings-path': req.body.settings,
+        public: req.body.public ? 1 : 0,
+        'files-path': req.body.languages || './',
+        'icon-url': req.body.icon || null
     };
 
     DBmanager.edit_project(req.params.id, data);

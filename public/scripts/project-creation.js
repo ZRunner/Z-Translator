@@ -25,8 +25,11 @@ function sendform(event) {
     data = {
         name: event.target[0].value,
         desc: event.target[1].value,
-        settings: event.target[2].value,
-        url: event.target[3].value
+        public: event.target[2].checked,
+        settings: event.target[3].value,
+        languages: event.target[4].value,
+        icon: event.target[5].value,
+        url: event.target[6].value
     }
     fetch('project-creation', {
         method: "POST",

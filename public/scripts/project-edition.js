@@ -21,7 +21,10 @@ function senddata(form) {
     const data = {
         name: form[0].value,
         desc: form[1].value,
-        settings: form[2].value
+        settings: form[2].value,
+        languages: form[3].value,
+        public: form[4].checked,
+        icon: form[5].value
     }
     let id = window.location.pathname.split('/');
     id = id[id.length - 1];
