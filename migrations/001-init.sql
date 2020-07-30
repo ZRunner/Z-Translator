@@ -22,10 +22,20 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `git-path` TEXT NOT NULL,
   `last-update` TIMESTAMP,
   `last-commit` TEXT,
-  `settings-path` TEXT
+  `settings-path` TEXT,
+  `files-path` TEXT,
+  `public` BOOLEAN DEFAULT 0,
+  `icon-url` TEXT
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_projects_name ON `projects` (`name`);
 CREATE INDEX IF NOT EXISTS idx_projects_owner ON `projects` (`owner`);
+
+CREATE TABLE IF NOT EXISTS `authorizations` (
+  `project` INTEGER NOT NULL,
+  `type` SMALLINT NOT NULL,
+  `value` VARCHAR(200) NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_authorizations_project ON `authorizations` (`project`);
  
 -- Down 
 -- DROP TABLE IF EXISTS `users`;
