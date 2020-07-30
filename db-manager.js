@@ -1,13 +1,16 @@
 const DB = require('better-sqlite3-helper');
 const simpleGit = require('simple-git');
 const fs = require('fs');
+const { isNullOrUndefined } = require('util');
 
 class DatabaseManager {
     constructor() {
         this.repositories_path = "./repositories";
         this.db = DB({
             migrate: { force: 'last' }
-        })
+        });
+        this.languages = JSON.parse(fs.readFileSync('languages.json'));
+        this.languages = new Map(Object.entries(this.languages));
     }
 
     close() {
@@ -46,6 +49,7 @@ class DatabaseManager {
             else
                 project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=? AND owner=?', id, owner);
             if (!project) return;
+            project['files-path'] = project['files-path'].replace(/^\.\//, '').replace(/\/$/, '')+'/';
             if (!project['settings-path']) return project;
             project['settings-path'] = project['settings-path'].replace(/^\.\//, '');
             let jsondata = { valid: true };
@@ -65,10 +69,12 @@ class DatabaseManager {
             projects = this.db.query('SELECT * FROM projects WHERE owner=?', owner);
         let results = new Array();
         for (const proj of projects) {
+            proj['files-path'] = proj['files-path'].replace(/^\.\//, '').replace(/\/$/, '')+'/';
             if (!proj['settings-path']) {
                 results.push(proj);
                 break;
             }
+            proj['settings-path'] = proj['settings-path'].replace(/^\.\//, '');
             let jsondata = { valid: true };;
             try {
                 let rawdata = fs.readFileSync(this.repositories_path + '/' + proj['git-path'] + '/' + proj['settings-path']);
@@ -99,13 +105,24 @@ class DatabaseManager {
             path = "project-" + res;
             this.db.update('projects', { 'git-path': path }, { id: res });
         }
-        const git = simpleGit('./repositories');
+        const git = simpleGit(this.repositories_path);
         git.clone(data['git-url'], path);
         return res
     }
 
     edit_project(id, data) {
         return this.db.update('projects', data, { id: id });
+    }
+
+    get_languageFiles(projectid, language) {
+        if (isNullOrUndefined(projectid)) return;
+        const projectdata = this.get_projects({ id: projectid });
+        if (projectdata === undefined) return;
+        const path = this.repositories_path + "/" + projectdata['git-path'] + "/" + projectdata['files-path'];
+        let available_lang = language ? [language] : Array.from(this.languages.keys());
+        available_lang = Array.from(available_lang, e => e.toLowerCase());
+        const t = fs.readdirSync(path);
+        const files = t.filter(e => available_lang.includes(e.replace(/\.lang$/, "")));
     }
 
 }
