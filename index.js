@@ -315,6 +315,29 @@ app.post("/edit-project/:id", function (req, res) {
 })
 
 
+
+
+// ----- WEBSOCKET ----- //
+
+
+app.ws('/project-ws/:id', function (ws, req) {
+    ws.projectid = req.params.id;
+    console.debug('new websocket connection');
+    ws.on('message', function (msg) {
+        let body;
+        try{
+            body = JSON.parse(msg);
+        } catch {
+            console.warn("WS: not json message:",msg);
+            return;
+        }
+        console.debug(body);
+        // const a = expressWs.getWss().clients
+        // a.forEach(instance => { instance.send(msg) })
+    });
+});
+
+
 app.listen(PORT_USED, function () {
     console.log(`Z-Translator V${VERSION} listening on port ${PORT_USED}!`);
 })
