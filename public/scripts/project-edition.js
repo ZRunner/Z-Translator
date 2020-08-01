@@ -4,15 +4,17 @@ function edit(event) {
     const cancellation = elem.textContent == "Cancel";
     elem.textContent = cancellation ? "Edit settings" : "Cancel";
     document.getElementById("save-s-btn").hidden = cancellation;
-    $('#local_settings input[type=text]').prop('readonly', cancellation)
+    $('#local_settings input').prop('readonly', cancellation)
+    $('#local_settings select').prop('disabled', cancellation)
 }
 
 function update(event) {
     event.preventDefault();
     document.getElementById("edit-s-btn").disabled = true;
     document.getElementById("save-s-btn").disabled = true;
-    $('#local_settings input[type=text]').prop('readonly', true)
-    $('#local_settings input[type=text]').addClass('loading')
+    $('#local_settings input').prop('readonly', true)
+    $('#local_settings select').prop('disabled', true)
+    $('#local_settings input').addClass('loading')
     senddata(event.target);
 }
 
@@ -24,7 +26,8 @@ function senddata(form) {
         settings: form[2].value,
         languages: form[3].value,
         public: form[4].checked,
-        icon: form[5].value
+        icon: form[5].value,
+        originlang: form[6].value,
     }
     let id = window.location.pathname.split('/');
     id = id[id.length - 1];

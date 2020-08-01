@@ -17,27 +17,40 @@
         <form id="local_settings" onsubmit="update(event)">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" class="form-control" value="<%= project.name %>" maxlength="50" required readonly>
+                <input type="text" id="name" class="form-control" value="<%= project.name %>" maxlength="50" required
+                    readonly>
             </div>
             <div class="form-group">
                 <label for="desc">Description</label>
-                <input type="text" id="desc" class="form-control" value="<%= project.description %>" maxlength="500" required readonly>
+                <input type="text" id="desc" class="form-control" value="<%= project.description %>" maxlength="500"
+                    required readonly>
             </div>
             <div class="form-group">
                 <label for="settings">Settings file path</label>
-                <input type="text" id="settings" class="form-control" value="<%= project['settings-path'] %>" maxlength="150" pattern="^(.+)\/([^/]+).json$" placeholder="./settings.json"  required readonly>
+                <input type="text" id="settings" class="form-control" value="<%= project['settings-path'] %>"
+                    maxlength="150" pattern="^(.+)\/([^/]+).json$" placeholder="./settings.json" required readonly>
             </div>
             <div class="form-group">
                 <label for="filespath">Files path</label>
                 <input type="text" id="filespath" class="form-control" value="<%= project['files-path'] %>" readonly>
             </div>
             <div class="form-check">
-                <input type="checkbox" id="public" class="form-check-input" <%= project['public'] ? 'checked': '' %> readonly>
+                <input type="checkbox" id="public" class="form-check-input" <%= project['public'] ? 'checked': '' %>
+                    readonly>
                 <label class="form-check-label" for="public">Public project</label>
             </div>
             <div class="form-group">
                 <label for="icon">Icon URL</label>
                 <input type="url" id="icon" class="form-control" value="<%= project['icon-url'] %>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="originlang">Origin language</label>
+                <select class="form-control" id="originlang" disabled>
+                    <% languages.forEach(elem => { %>
+                        <option value=<%= elem.value %> <%= elem.value == project['origin-lang'] ? "selected" :"" %>>
+                        <%= elem.name %></option>
+                    <% }) %>
+                </select>
             </div>
             <button type="submit" id="save-s-btn" class="btn btn-primary" hidden>Save</button>
             <button id="edit-s-btn" class="btn btn-secondary" onclick="edit(event)">Edit settings</button>
@@ -48,13 +61,14 @@
         <h4>Remote settings</h4>
         <small>These settings are stored in your Git repository.</small>
         <% if (!project.valid) { %>
-            <p id="invalid"><b>Unable to fetch settings.</b> Please make sure your settings file is correctly in local settings.</p>
+        <p id="invalid"><b>Unable to fetch settings.</b> Please make sure your settings file is correctly in local
+            settings.</p>
         <% } else { %>
-            <div class="form-group">
-                <label for="name">Ignored files</label>
-                <input type="text" id="name" class="form-control" value="<%= project['ignored-files'] %>" readonly>
-            </div>
-        <% } %> 
+        <div class="form-group">
+            <label for="name">Ignored files</label>
+            <input type="text" id="name" class="form-control" value="<%= project['ignored-files'] %>" readonly>
+        </div>
+        <% } %>
     </div>
 
 

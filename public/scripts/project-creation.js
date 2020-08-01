@@ -29,7 +29,8 @@ function sendform(event) {
         settings: event.target[3].value,
         languages: event.target[4].value,
         icon: event.target[5].value,
-        url: event.target[6].value
+        originlang: event.target[6].value,
+        url: event.target[7].value
     }
     fetch('project-creation', {
         method: "POST",

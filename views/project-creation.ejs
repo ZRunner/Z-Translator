@@ -42,6 +42,14 @@
                 <input type="url" class="form-control" name="icon" id="icon">
             </div>
             <div class="form-group">
+                <label for="originlang">Origin language</label>
+                <select class="form-control" id="originlang">
+                    <% languages.forEach(elem => { %>
+                        <option value=<%= elem.value %> <%= elem.value == "en" ? "selected" :"" %>> <%= elem.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="url">GitHub url</label>
                 <input type="url" class="form-control" name="url" id="url" size=60 readonly>
             </div>

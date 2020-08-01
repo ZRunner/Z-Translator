@@ -135,6 +135,13 @@ app.get("/project-creation", function (req, res) {
         res.redirect("signin");
         return;
     }
+    let l = Array.from(DBmanager.languages.entries(), v => {
+        return {
+            name: v[1],
+            value: v[0]
+        }
+    });
+    l.sort((a, b) => a.name < b.name ? -1 : 1);
     if (req.session.account['github-name']) {
         got(`https://api.github.com/users/${req.session.account['github-name']}/repos`, { responseType: 'json' })
             .then(answer => {
@@ -145,10 +152,10 @@ app.get("/project-creation", function (req, res) {
                         id: elem.id
                     })
                 }
-                res.render("project-creation", { account: req.session.account, repos: repos, level: 0 })
+                res.render("project-creation", { account: req.session.account, repos: repos, languages: l, level: 0 })
             })
     } else {
-        res.render("project-creation", { account: req.session.account, repos: [], level: 0 })
+        res.render("project-creation", { account: req.session.account, repos: [], languages: l, level: 0 })
     }
 })
 
@@ -157,8 +164,15 @@ app.get("/edit-project/:id", function (req, res) {
         res.redirect("/signin");
         return;
     }
+    let l = Array.from(DBmanager.languages.entries(), v => {
+        return {
+            name: v[1],
+            value: v[0]
+        }
+    });
+    l.sort((a, b) => a.name < b.name ? -1 : 1);
     const project = DBmanager.get_projects({ owner: req.session.account.id, id: req.params.id });
-    res.render("project-edition", { account: req.session.account, project: project, level: 1 })
+    res.render("project-edition", { account: req.session.account, project: project, languages: l, level: 1 })
 })
 
 app.get("/project/:id", function (req, res) {
@@ -282,7 +296,8 @@ app.post("/project-creation", function (req, res) {
         'git-url': req.body.url,
         'settings-path': req.body.settings,
         'files-path': req.body.languages || './',
-        'icon-url': req.body.icon || null
+        'icon-url': req.body.icon || null,
+        'origin-lang': req.body.originlang
     })
     res.json({ 'project-id': projectid })
 })
@@ -307,9 +322,9 @@ app.post("/edit-project/:id", function (req, res) {
         'settings-path': req.body.settings,
         public: req.body.public ? 1 : 0,
         'files-path': req.body.languages || './',
-        'icon-url': req.body.icon || null
+        'icon-url': req.body.icon || null,
+        'origin-lang': req.body.originlang
     };
-
     DBmanager.edit_project(req.params.id, data);
     res.status(200).send();
 })
@@ -325,10 +340,10 @@ app.ws('/project-ws/:id', function (ws, req) {
     console.debug('new websocket connection');
     ws.on('message', function (msg) {
         let body;
-        try{
+        try {
             body = JSON.parse(msg);
         } catch {
-            console.warn("WS: not json message:",msg);
+            console.warn("WS: not json message:", msg);
             return;
         }
         console.debug(body);

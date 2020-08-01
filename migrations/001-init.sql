@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `settings-path` TEXT,
   `files-path` TEXT,
   `public` BOOLEAN DEFAULT 0,
-  `icon-url` TEXT
+  `icon-url` TEXT,
+  `origin-lang` VARCHAR(10) DEFAULT "en"
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_projects_name ON `projects` (`name`);
 CREATE INDEX IF NOT EXISTS idx_projects_owner ON `projects` (`owner`);

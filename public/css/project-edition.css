@@ -14,7 +14,8 @@
     color: darkred;
 }
 
-.form-control[readonly] {
+.form-control[readonly],
+.form-control[disabled] {
     background-color:transparent;
     opacity:1;
     border-color: transparent;
