@@ -41,15 +41,18 @@ class DatabaseManager {
         return this.db.query('SELECT * FROM projects WHERE owner=?', userid)
     }
 
-    get_projects({ id = null, owner = null }) {
+    get_projects({ id = null, owner = null, fields = [] }) {
+        if (fields.length == 0) var select = "SELECT *"
+        else var select = "SELECT `" + fields.join("`, `") + "`";
         if (id != null) {
             let project = null;
             if (owner === null)
-                project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=?', id);
+                project = this.db.queryFirstRow(select + ' FROM projects WHERE id=?', id);
             else
-                project = this.db.queryFirstRow('SELECT * FROM projects WHERE id=? AND owner=?', id, owner);
+                project = this.db.queryFirstRow(select + ' FROM projects WHERE id=? AND owner=?', id, owner);
             if (!project) return;
-            project['files-path'] = project['files-path'].replace(/^\.\//, '').replace(/\/$/, '')+'/';
+            if (fields.length == 0 || fields.includes("files-path"))
+                project['files-path'] = project['files-path'].replace(/^\.\//, '').replace(/\/$/, '') + '/';
             if (!project['settings-path']) return project;
             project['settings-path'] = project['settings-path'].replace(/^\.\//, '');
             let jsondata = { valid: true };
@@ -64,12 +67,13 @@ class DatabaseManager {
         }
         let projects = []
         if (owner === null)
-            projects = this.db.query('SELECT * FROM projects');
+            projects = this.db.query(select + ' FROM projects');
         else
-            projects = this.db.query('SELECT * FROM projects WHERE owner=?', owner);
+            projects = this.db.query(select + ' FROM projects WHERE owner=?', owner);
         let results = new Array();
         for (const proj of projects) {
-            proj['files-path'] = proj['files-path'].replace(/^\.\//, '').replace(/\/$/, '')+'/';
+            if (fields.length == 0 || fields.includes("files-path"))
+                proj['files-path'] = proj['files-path'].replace(/^\.\//, '').replace(/\/$/, '') + '/';
             if (!proj['settings-path']) {
                 results.push(proj);
                 break;
@@ -116,13 +120,43 @@ class DatabaseManager {
 
     get_languageFiles(projectid, language) {
         if (isNullOrUndefined(projectid)) return;
-        const projectdata = this.get_projects({ id: projectid });
+        const projectdata = this.get_projects({ id: projectid, fields: ['git-path', 'files-path'] });
         if (projectdata === undefined) return;
         const path = this.repositories_path + "/" + projectdata['git-path'] + "/" + projectdata['files-path'];
         let available_lang = language ? [language] : Array.from(this.languages.keys());
         available_lang = Array.from(available_lang, e => e.toLowerCase());
         const t = fs.readdirSync(path);
         const files = t.filter(e => available_lang.includes(e.replace(/\.lang$/, "")));
+        return Array.from(files, f => path + f);
+    }
+
+    parse_langFile(path) {
+        let data = Array.from(fs.readFileSync(path, 'utf-8').split("\n"), e => Array.from(e.split("=", 2), x => x.trim()));
+        data = data.filter(e => (e.length == 2) && (e[0][0] !== "#") && (e[0].length > 0));
+        return new Map(data);
+    }
+
+    compare_translations(translation, origin, projectid) {
+        if (isNullOrUndefined(origin)) {
+            if (isNullOrUndefined(projectid)) return;
+            const projectdata = this.get_projects({ id: projectid, fields: ['origin-lang']});
+            const originlang = projectdata['origin-lang'];
+            const languages = this.get_languageFiles(projectid, originlang)
+            if (!languages || languages.length == 0) return;
+            origin = this.parse_langFile(languages[0]);
+        }
+        if (typeof(translation) == "string") {
+            const languages = this.get_languageFiles(projectid, translation)
+            if (!languages) return;
+            translation = this.parse_langFile(languages[0]);
+        }
+        return Array.from(origin.keys(), key => {
+            return {
+                key: key,
+                origin: origin.get(key),
+                translation: translation.get(key)
+            }
+        })
     }
 
 }
