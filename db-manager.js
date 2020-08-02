@@ -37,6 +37,11 @@ class DatabaseManager {
         return this.db.queryFirstRow('SELECT * FROM users WHERE id=?', id)
     }
 
+    project_exists(projectid) {
+        const res = this.db.queryFirstCell('SELECT EXISTS(SELECT 1 FROM projects WHERE id = ?)', projectid);
+        return Boolean(res);
+    }
+
     get_owned_projects(userid) {
         return this.db.query('SELECT * FROM projects WHERE owner=?', userid)
     }
