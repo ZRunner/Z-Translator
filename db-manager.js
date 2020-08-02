@@ -118,7 +118,18 @@ class DatabaseManager {
         return this.db.update('projects', data, { id: id });
     }
 
-    get_languageFiles(projectid, language) {
+    get_languages(projectid) {
+        const projectdata = this.get_projects({ id: projectid, fields: ['git-path', 'files-path'] });
+        if (projectdata === undefined) return;
+        const path = this.repositories_path + "/" + projectdata['git-path'] + "/" + projectdata['files-path'];
+        const available_lang = Array.from(this.languages.keys());
+        const files = Array.from(fs.readdirSync(path), e => e.toLowerCase());
+        const result = available_lang.filter(e => files.includes(e.toLowerCase() + ".lang"));
+        let res = new Map(Array.from(result, e => [e, this.languages.get(e)]));
+        return res
+    }
+
+    get_languagesFiles(projectid, language) {
         if (isNullOrUndefined(projectid)) return;
         const projectdata = this.get_projects({ id: projectid, fields: ['git-path', 'files-path'] });
         if (projectdata === undefined) return;
@@ -139,13 +150,13 @@ class DatabaseManager {
     compare_translations(translation, origin, projectid) {
         if (isNullOrUndefined(origin)) {
             if (isNullOrUndefined(projectid)) return;
-            const projectdata = this.get_projects({ id: projectid, fields: ['origin-lang']});
+            const projectdata = this.get_projects({ id: projectid, fields: ['origin-lang'] });
             const originlang = projectdata['origin-lang'];
             const languages = this.get_languageFiles(projectid, originlang)
             if (!languages || languages.length == 0) return;
             origin = this.parse_langFile(languages[0]);
         }
-        if (typeof(translation) == "string") {
+        if (typeof (translation) == "string") {
             const languages = this.get_languageFiles(projectid, translation)
             if (!languages) return;
             translation = this.parse_langFile(languages[0]);
