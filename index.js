@@ -8,6 +8,7 @@ const got = require('got');
 const VERSION = require('./package.json').version;
 const credentials = require('./credentials.json');
 const DatabaseManager = require('./db-manager').DatabaseManager;
+const WSManager = require('./ws-manager');
 
 const PORT_USED = 3200;
 
@@ -329,29 +330,7 @@ app.post("/edit-project/:id", function (req, res) {
     res.status(200).send();
 })
 
-
-
-
-// ----- WEBSOCKET ----- //
-
-
-app.ws('/project-ws/:id', function (ws, req) {
-    ws.projectid = req.params.id;
-    console.debug('new websocket connection');
-    ws.on('message', function (msg) {
-        let body;
-        try {
-            body = JSON.parse(msg);
-        } catch {
-            console.warn("WS: not json message:", msg);
-            return;
-        }
-        console.debug(body);
-        // const a = expressWs.getWss().clients
-        // a.forEach(instance => { instance.send(msg) })
-    });
-});
-
+app.ws('/project-ws/:id', WSManager.init);
 
 app.listen(PORT_USED, function () {
     console.log(`Z-Translator V${VERSION} listening on port ${PORT_USED}!`);
