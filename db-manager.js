@@ -156,12 +156,12 @@ class DatabaseManager {
             if (isNullOrUndefined(projectid)) return;
             const projectdata = this.get_projects({ id: projectid, fields: ['origin-lang'] });
             const originlang = projectdata['origin-lang'];
-            const languages = this.get_languageFiles(projectid, originlang)
+            const languages = this.get_languagesFiles(projectid, originlang)
             if (!languages || languages.length == 0) return;
             origin = this.parse_langFile(languages[0]);
         }
         if (typeof (translation) == "string") {
-            const languages = this.get_languageFiles(projectid, translation)
+            const languages = this.get_languagesFiles(projectid, translation)
             if (!languages) return;
             translation = this.parse_langFile(languages[0]);
         }
