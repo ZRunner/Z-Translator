@@ -13,16 +13,33 @@
     <h1 id="title">Translate - <%= project_name %></h1>
 
     <div id="mainzone">
-        <div id="loading" class="section">
+        <div id="loading" class="section d-none">
             <div class="spinner-border text-success" role="status" aria-hidden="true"></div>
             Loading...
+        </div>
+
+        <div id="closed" class="section d-none">
+            <%- include('../partials/report_problem') %>
+            Connection to server has been closed
         </div>
 
         <div id="select-lang" class="section d-none">
             <h4>Select a language to translate</h4>
 
             <div id="langs-btn" class="btn-group-vertical" role="group">
-                <button type="button" class="btn btn-secondary">1</button>
+                <!-- <button type="button" class="btn btn-secondary">1</button> -->
+            </div>
+        </div>
+
+        <div id="tr-panel" class="section d-none">
+            <div id="tr-left" class="d-none d-md-flex"></div>
+            <div id="tr-right">
+                <div id="tr-origin">
+
+                </div>
+                <div id="tr-area">
+                    
+                </div>
             </div>
         </div>
     </div>
