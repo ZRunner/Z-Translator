@@ -29,7 +29,6 @@ class DatabaseManager {
     connect_user(email, password) {
         let account = this.db.queryFirstRow('SELECT * FROM users WHERE email=?', email);
         if (!account) return null;
-        console.debug(account);
         return account.password === password ? account : null;
     }
 
