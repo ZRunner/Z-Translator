@@ -181,7 +181,7 @@ app.get("/project/:id", function (req, res) {
         res.redirect("/signin");
         return;
     }
-    if (!DBmanager.project_exists(req.params.id)) {
+    if (!DBmanager.project_is_valid(req.params.id)) {
         res.status(404).send();
         return;
     }
