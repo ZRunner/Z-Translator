@@ -27,12 +27,12 @@
             </div>
             <div class="form-group">
                 <label for="settings">Settings file path</label>
-                <input type="text" id="settings" class="form-control" value="<%= project['settings-path'] %>"
+                <input type="text" id="settings" class="form-control" value="<%= "./"+project['settings-path'] %>"
                     maxlength="150" pattern="^(.+)\/([^/]+).json$" placeholder="./settings.json" required readonly>
             </div>
             <div class="form-group">
                 <label for="filespath">Files path</label>
-                <input type="text" id="filespath" class="form-control" value="<%= project['files-path'] %>" readonly>
+                <input type="text" id="filespath" class="form-control" value="<%= "./"+project['files-path'] %>" readonly>
             </div>
             <div class="form-check">
                 <input type="checkbox" id="public" class="form-check-input" <%= project['public'] ? 'checked': '' %>
