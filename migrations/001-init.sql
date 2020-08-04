@@ -34,7 +34,8 @@ CREATE INDEX IF NOT EXISTS idx_projects_owner ON `projects` (`owner`);
 CREATE TABLE IF NOT EXISTS `authorizations` (
   `project` INTEGER NOT NULL,
   `type` SMALLINT NOT NULL,
-  `value` VARCHAR(200) NOT NULL
+  `value` VARCHAR(200) NOT NULL,
+  `languages` TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_authorizations_project ON `authorizations` (`project`);
  
