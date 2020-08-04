@@ -181,8 +181,12 @@ app.get("/project/:id", function (req, res) {
         res.redirect("/signin");
         return;
     }
-    const project = DBmanager.get_projects({ id: req.params.id });
-    res.render("project", { account: req.session.account, project: project, level: 1 });
+    if (!DBmanager.project_exists(req.params.id)) {
+        res.status(404).send();
+        return;
+    }
+    const project = DBmanager.get_projects({ id: req.params.id, fields: ['name'] });
+    res.render("project", { account: req.session.account, project_name: project.name, level: 1 });
 })
 
 
