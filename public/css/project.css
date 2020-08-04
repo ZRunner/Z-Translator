@@ -17,6 +17,7 @@
     right: 0;
     top: 180px;
     display: flex;
+    padding: 2% 3%;
 }
 
 #loading {
@@ -27,4 +28,8 @@
 
 #loading .spinner-border {
     margin-right: 7px;
+}
+
+.section h4 {
+    padding-bottom: 15px;
 }

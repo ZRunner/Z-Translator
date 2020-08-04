@@ -10,12 +10,20 @@
 <body onload="main()">
     <%- include('../partials/navbar') %>
 
-    <h1 id="title">Translate - <%= project.name %></h1>
+    <h1 id="title">Translate - <%= project_name %></h1>
 
     <div id="mainzone">
-        <div id="loading">
+        <div id="loading" class="section">
             <div class="spinner-border text-success" role="status" aria-hidden="true"></div>
             Loading...
+        </div>
+
+        <div id="select-lang" class="section d-none">
+            <h4>Select a language to translate</h4>
+
+            <div id="langs-btn" class="btn-group-vertical" role="group">
+                <button type="button" class="btn btn-secondary">1</button>
+            </div>
         </div>
     </div>
 

@@ -47,7 +47,8 @@ function init(ws, req) {
     });
 
     ws.send(msg("connected", null, {
-        "languages": Object.fromEntries(DBmanager.get_languages(ws.projectid).entries())
+        "languages": Object.fromEntries(DBmanager.get_languages(ws.projectid).entries()),
+        "project": DBmanager.get_projects({ id: ws.projectid })
     }));
 }
 
