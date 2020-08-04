@@ -28,6 +28,20 @@ function select_lang(lang) {
     Data.ws.send(msg("load-language", { "language": lang }))
 }
 
+window.addEventListener('popstate', function (event) {
+    // The URL changed...
+    display_hash(window.location.hash)
+});
+
+function display_hash(hash) {
+    $(`a.tr-string.selected`).removeClass("selected");
+    $(`a.tr-string[href$="${hash}"]`).addClass("selected");
+    $('#tr-left').animate({
+        scrollTop: $("a.tr-string.selected").position().top+$("#tr-left").scrollTop()-20
+    }, 800);
+}
+
+
 function main() {
     // display_section('tr-panel');
     // return;
@@ -83,6 +97,7 @@ function main() {
             const percent = Math.floor(done/body.data.translations.length*100);
             $("#tr-left-sum").html(`<span>${Data.languages[body.data.language]}</span> <span>${percent}%</span>`)
             display_section('tr-panel');
+            if (window.location.hash) display_hash(window.location.hash);
         }
         else {
             console.log("WS: unhandled message")
