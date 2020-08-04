@@ -41,6 +41,16 @@ class DatabaseManager {
         return Boolean(res);
     }
 
+    project_is_valid(projectid) {
+        const project = this.get_projects({ id: projectid, fields: ['origin-lang'] });
+        if (!project)
+            return false;
+        const available_langs = Array.from(this.get_languages(projectid).keys());
+        if (!available_langs.includes(project['origin-lang']))
+            return false;
+        return true;
+    }
+
     get_owned_projects(userid) {
         return this.db.query('SELECT * FROM projects WHERE owner=?', userid)
     }
@@ -67,6 +77,7 @@ class DatabaseManager {
                 if (err.code !== 'ENOENT') console.error(err.code, err);
                 jsondata.valid = false;
             }
+            jsondata.valid = jsondata.valid && this.project_is_valid(id);
             return { ...project, ...jsondata }
         }
         let projects = []
@@ -91,6 +102,7 @@ class DatabaseManager {
                 if (err.code !== 'ENOENT') console.error(err.code, err);
                 jsondata.valid = false;
             }
+            jsondata.valid = jsondata.valid && this.project_is_valid(proj.id);
             results.push({ ...proj, ...jsondata });
         }
         return results;
@@ -153,16 +165,16 @@ class DatabaseManager {
 
     compare_translations(translation, origin, projectid) {
         if (isNullOrUndefined(origin)) {
-            if (isNullOrUndefined(projectid)) return;
+            if (isNullOrUndefined(projectid)) throw Error("projectid is undefined");
             const projectdata = this.get_projects({ id: projectid, fields: ['origin-lang'] });
             const originlang = projectdata['origin-lang'];
             const languages = this.get_languagesFiles(projectid, originlang)
-            if (!languages || languages.length == 0) return;
+            if (!languages || languages.length == 0) throw Error("Original language cannot be found");
             origin = this.parse_langFile(languages[0]);
         }
         if (typeof (translation) == "string") {
             const languages = this.get_languagesFiles(projectid, translation)
-            if (!languages) return;
+            if (!languages) throw Error("Destination language cannot be found");
             translation = this.parse_langFile(languages[0]);
         }
         return Array.from(origin.keys(), key => {
