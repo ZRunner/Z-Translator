@@ -334,8 +334,9 @@ app.post("/edit-project/:id", function (req, res) {
     res.status(200).send();
 })
 
-app.ws('/project-ws/:id', WSManager.init);
+app.ws('/project-ws/:id', WSManager.init_ws);
 
 app.listen(PORT_USED, function () {
+    WSManager.init(expressWs);
     console.log(`Z-Translator V${VERSION} listening on port ${PORT_USED}!`);
 })

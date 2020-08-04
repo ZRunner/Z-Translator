@@ -1,5 +1,6 @@
 const { DatabaseManager } = require('./db-manager');
 const DBmanager = new DatabaseManager();
+var expressWs;
 
 function msg(message, code, data) {
     if (data === undefined || data === null) {
@@ -10,7 +11,13 @@ function msg(message, code, data) {
     return JSON.stringify({ message: message, code: code, data: data });
 }
 
-function init(ws, req) {
+function send_all(arg) {
+    expressWs.getWss().clients.forEach(client => {
+        client.send(arg);
+    });
+}
+
+function init_ws(ws, req) {
     if (!req.session.account) {
         ws.send("Unauthenticated");
         ws.terminate();
@@ -33,17 +40,34 @@ function init(ws, req) {
         console.debug(`WS: closed because of ${reason} (${code})`);
     });
 
-    ws.on('message', function (msg) {
+    ws.on('message', function (message) {
         let body;
         try {
-            body = JSON.parse(msg);
+            body = JSON.parse(message);
         } catch {
-            console.warn("WS: not json message:", msg);
+            console.warn("WS: not json message:", message);
             return;
         }
-        console.debug(body);
-        // const a = expressWs.getWss().clients
-        // a.forEach(instance => { instance.send(msg) })
+        console.log("WS: new message", body);
+
+        // load a language for a user
+        if (body.message == "load-language") {
+            // tell to everyone that a new user went online
+            send_all(msg("user_join", 200, {
+                username: req.session.account.nickname,
+                lang: body.data.language
+            }));
+            try {
+                const lang_data = DBmanager.compare_translations(body.data.language, undefined, ws.projectid);
+                ws.send(msg("load-language", 200, lang_data));
+            } catch (err) {
+                console.error(err);
+                ws.close(1011, "Unable to get current translations");
+                return;
+            }
+        } else {
+            console.log("WS: unhandled message");
+        }
     });
 
     ws.send(msg("connected", null, {
@@ -52,6 +76,11 @@ function init(ws, req) {
     }));
 }
 
+function init(wsApp) {
+    expressWs = wsApp;
+}
+
 module.exports = {
-    init: init
+    init: init,
+    init_ws: init_ws
 }
