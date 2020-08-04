@@ -59,7 +59,7 @@ function init_ws(ws, req) {
             }));
             try {
                 const lang_data = DBmanager.compare_translations(body.data.language, undefined, ws.projectid);
-                ws.send(msg("load-language", 200, lang_data));
+                ws.send(msg("load-language", 200, { translations: lang_data, language: body.data.language }));
             } catch (err) {
                 console.error(err);
                 ws.close(1011, "Unable to get current translations");
