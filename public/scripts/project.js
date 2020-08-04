@@ -9,6 +9,10 @@ function msg(message, data) {
     return JSON.stringify({ message: message, data: data });
 }
 
+function isNullOrUndefined(arg) {
+    return (arg === null || arg === undefined);
+}
+
 function display_section(id) {
     $(".section").addClass('d-none');
     $('#'+id).removeClass('d-none');
@@ -25,6 +29,8 @@ function select_lang(lang) {
 }
 
 function main() {
+    // display_section('tr-panel');
+    // return;
     display_section('loading');
     Data.ws = new WebSocket(new_uri);
 
@@ -58,6 +64,24 @@ function main() {
             }
             display_section('select-lang');
         } else if (body.message == "load-language") {
+            let done = 0;
+            body.data.translations.sort((a, b) => {
+                un_a = isNullOrUndefined(a.translation);
+                un_b = isNullOrUndefined(b.translation);
+                if (un_a) {
+                    if (un_b)
+                        return 0;
+                    return -1
+                } if (un_b)
+                    return 1;
+            })
+            body.data.translations.forEach(tr => {
+                const v = !isNullOrUndefined(tr.translation);
+                $('#tr-left').append(`<a class="tr-string ${v ? "valid" : ""}" href="#${tr.key}">${tr.origin}</a>`)
+                if (v) done += 1;
+            });
+            const percent = Math.floor(done/body.data.translations.length*100);
+            $("#tr-left-sum").html(`<span>${Data.languages[body.data.language]}</span> <span>${percent}%</span>`)
             display_section('tr-panel');
         }
         else {
