@@ -1,0 +1,30 @@
+#title {
+    margin: 3% 0 15px 5%;
+}
+
+@media (max-width: 768px) {
+    #title {
+        font-size: 32px;
+    }
+}
+
+#mainzone {
+    /* background-color: greenyellow; */
+    background-color: #f0f5f5;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 180px;
+    display: flex;
+}
+
+#loading {
+    margin: auto;
+    align-items: center;
+    display: flex;
+}
+
+#loading .spinner-border {
+    margin-right: 7px;
+}
