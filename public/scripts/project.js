@@ -58,6 +58,14 @@ function main() {
     display_section('loading');
     Data.ws = new WebSocket(new_uri);
 
+    function heartbeat() {
+        if (!Data.ws) return;
+        if (Data.ws.readyState !== 1) return;
+        Data.ws.ping();
+        setTimeout(heartbeat, 500);
+    };
+    heartbeat();
+
     Data.ws.addEventListener('open', ev => {
         console.log("WS: opened", ev);
     })
