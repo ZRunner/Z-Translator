@@ -116,7 +116,7 @@
                     <% if (callback_github) { %>
                     <div class="md-form mb-4">
                         <label data-success="right" for="complete-github">GitHub username</label>
-                        <input type="text" id="complete-github" class="form-control" pattern="^\w+$" name="github-name" disabled>
+                        <input type="text" id="complete-github" class="form-control" pattern="^\w+$" name="github-name" readonly>
                     </div>
                     <% } %>
 
@@ -124,7 +124,7 @@
                     <div class="md-form mb-4">
                         <label data-success="right" for="complete-discord">Discord ID</label>
                         <input type="number" id="complete-discord" class="form-control" pattern="^\d{16,18}$"
-                            value="<%= callback_discord %>" name="discord-id" disabled>
+                            value="<%= callback_discord %>" name="discord-id" readonly>
                     </div>
                     <% } %>
 
