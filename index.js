@@ -223,7 +223,7 @@ app.post("/minecraft-signup", function (req, res) {
     })
 })
 
-app.post("/github-callback", function (req, res) {
+app.get("/github-callback", function (req, res) {
     if (!req.query.code) {
         res.status(422).send();
         return;
