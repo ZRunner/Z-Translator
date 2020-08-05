@@ -139,9 +139,8 @@
     <% if (callback_github) { %>
         <div id="gitinfo"><%= JSON.stringify(callback_github) %></div>
         <script>
-        console.debug("test",JSON.parse(document.getElementById("gitinfo").textContent));
         ask_info(JSON.parse(document.getElementById("gitinfo").textContent));
-        // document.getElementById("gitinfo").remove();
+        document.getElementById("gitinfo").remove();
         </script>
     <% } %> 
 
