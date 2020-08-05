@@ -61,13 +61,13 @@ function main() {
     function heartbeat() {
         if (!Data.ws) return;
         if (Data.ws.readyState !== 1) return;
-        Data.ws.ping();
+        Data.ws.send("heartbeat");
         setTimeout(heartbeat, 500);
     };
-    heartbeat();
 
     Data.ws.addEventListener('open', ev => {
         console.log("WS: opened", ev);
+        heartbeat();
     })
 
     Data.ws.addEventListener('close', ev => {
@@ -76,6 +76,7 @@ function main() {
     })
 
     Data.ws.addEventListener('message', ev => {
+        if (ev.data == "heartbeat back") return;
         try {
             var body = JSON.parse(ev.data);
         } catch {

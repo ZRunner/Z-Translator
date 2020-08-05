@@ -39,6 +39,10 @@ function init_ws(ws, req) {
     });
 
     ws.on('message', function (message) {
+        if (message == "heartbeat") {
+            ws.send("heartbeat back");
+            return
+        }
         let body;
         try {
             body = JSON.parse(message);
