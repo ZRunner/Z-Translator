@@ -104,7 +104,7 @@
                     <div class="md-form mb-4">
                         <label data-success="right" for="complete-avatar">Avatar URL</label>
                         <input type="url" id="complete-avatar" class="form-control"
-                            name="avatar" pattern="^https?:\/\/.+\.(png|jpe?g|tif|svg)$">
+                            name="avatar" pattern="^https?:\/\/(?:.+\.(png|jpe?g|tif|svg)|avatars.\.githubusercontent\.com\/u\/\d+(?:\?v=.)?)$">
                     </div>
 
                     <div class="md-form mb-4" id="complete-mcform" hidden>
@@ -140,9 +140,8 @@
     <% if (callback_github) { %>
         <div id="gitinfo"><%= JSON.stringify(callback_github) %></div>
         <script>
-            console.debug(document.getElementById("gitinfo").textContent);
         ask_info(JSON.parse(document.getElementById("gitinfo").textContent));
-        document.getElementById("gitinfo").remove();
+        // document.getElementById("gitinfo").remove();
         </script>
     <% } %> 
 

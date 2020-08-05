@@ -32,6 +32,7 @@ function asubmit(event) {
 }
 
 function ask_info(data) {
+    console.debug(data);
     $('#completeModal').modal('show');
     $('#complete-name').val(data.username);
     if (data.email) {
