@@ -19,13 +19,11 @@ function send_all(arg) {
 
 function init_ws(ws, req) {
     if (!req.session.account) {
-        ws.send("Unauthenticated");
-        ws.terminate();
+        ws.close(4000, "Unauthenticated");
         return;
     };
     if (!DBmanager.project_exists(req.params.id)) {
-        ws.send("Invalid project");
-        ws.terminate();
+        ws.close(4004, "Invalid project");
         return;
     };
     ws.projectid = req.params.id;
