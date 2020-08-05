@@ -116,8 +116,7 @@
                     <% if (callback_github) { %>
                     <div class="md-form mb-4">
                         <label data-success="right" for="complete-github">GitHub username</label>
-                        <input type="text" id="complete-github" class="form-control" pattern="^\w+$"
-                            value="<%= callback_github %>" name="github-name" disabled>
+                        <input type="text" id="complete-github" class="form-control" pattern="^\w+$" name="github-name" disabled>
                     </div>
                     <% } %>
 
@@ -140,6 +139,7 @@
     <% if (callback_github) { %>
         <div id="gitinfo"><%= JSON.stringify(callback_github) %></div>
         <script>
+        console.debug("test",JSON.parse(document.getElementById("gitinfo").textContent));
         ask_info(JSON.parse(document.getElementById("gitinfo").textContent));
         // document.getElementById("gitinfo").remove();
         </script>
