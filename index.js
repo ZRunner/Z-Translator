@@ -237,23 +237,31 @@ app.get("/github-callback", function (req, res) {
         responseType: 'json'
     }).then(answer => {
         const auth = answer.body.access_token;
-        console.debug("First answer",answer.body);
+        console.debug("First answer", answer.body);
         const scopes = answer.body.scope.split(',');
         if (!scopes.includes('read:user')) {
             res.status(202).send();
             return;
         }
         got("https://api.github.com/user", {
-            headers: { Authorization: 'token '+auth }
+            headers: { Authorization: 'token ' + auth }
         }).then(answer => {
-            console.debug("Second answer",answer);
+            console.debug("Second answer", answer.body);
             console.log(`GitHub Authentification success - user ${null}`);
-            res.status(202).send();
+            const acc = {
+                username: answer.body.name,
+                email: answer.body.email,
+                avatar_url: answer.body.avatar_url,
+                git_name: answer.body.login
+            }
+            res.render("signup", { account: null, github_client: credentials["github-client-id"], callback_github: acc, callback_discord: null, level: 0 });
         }).catch(err => {
             console.warn(`GitHub Authentification failure (2) - ${err}`);
+            res.status(500).send();
         })
     }).catch(err => {
         console.warn(`GitHub Authentification failure (1) - ${err}`);
+        res.status(500).send();
     })
 })
 

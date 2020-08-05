@@ -137,6 +137,14 @@
         </div>
     </div>
 
+    <% if (callback_github) { %>
+        <div id="gitinfo"><%= callback_github %></div>
+        <script>
+        ask_info(JSON.parse(document.getElementById("gitinfo")))
+        document.getElementById("gitinfo").remove();
+        </script>
+    <% } %> 
+
 </body>
 
 </html>

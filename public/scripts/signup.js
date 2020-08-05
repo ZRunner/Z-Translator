@@ -20,15 +20,13 @@ function asubmit(event) {
         },
         body: JSON.stringify(data)
     }).then(res => {
-        console.debug(res);
         if (res.status == 200) return res.json();
         alert("Wrong username or password!");
         return null;
     }).then(data => {
         if (!data) return;
         $('#loginModal').modal('hide');
-        console.debug(data);
-        ask_info(data)
+        ask_info(data);
     })
     return false;
 }
@@ -39,9 +37,15 @@ function ask_info(data) {
     if (data.email) {
         $('#complete-email').val(data.email);
     }
+    if (data.avatar_url) {
+        $('#complete-avatar').val(data.avatar_url);
+    }
     if (data.minecraft_name) {
         $('#complete-mcname').val(data.minecraft_name);
         $('#complete-mcuuid').val(data.minecraft_uuid);
         $('#complete-mcform').removeAttr('hidden');
+    }
+    if (data.git_name) {
+        $('#complete-github').val(data.git_name);
     }
 }
