@@ -16,7 +16,6 @@ const app = express();
 
 // add timestamps in front of log messages 
 require('console-stamp')(console, {
-    format: ':date(dd.mm HH:MM:ss.l) :label',
     level: "log",
     colors: {
         stamp: 'yellow',
@@ -238,8 +237,8 @@ app.get("/github-callback", function (req, res) {
         responseType: 'json'
     }).then(answer => {
         const auth = answer.body.access_token;
-        console.debug(answer);
-        const scopes = answer.body.scopes.split(',');
+        console.debug("First answer",answer.body);
+        const scopes = answer.body.scope.split(',');
         if (!scopes.includes('read:user')) {
             res.status(202).send();
             return;
@@ -247,7 +246,7 @@ app.get("/github-callback", function (req, res) {
         got("https://api.github.com/user", {
             headers: { token: auth }
         }).then(answer => {
-            console.debug(answer);
+            console.debug("Second answer",answer);
             console.log(`GitHub Authentification success - user ${null}`);
             res.status(202).send();
         })
