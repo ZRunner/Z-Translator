@@ -244,7 +244,8 @@ app.get("/github-callback", function (req, res) {
             return;
         }
         got("https://api.github.com/user", {
-            headers: { Authorization: 'token ' + auth }
+            headers: { Authorization: 'token ' + auth },
+            responseType: 'json'
         }).then(answer => {
             console.debug("Second answer", answer.body);
             console.log(`GitHub Authentification success - user ${null}`);
