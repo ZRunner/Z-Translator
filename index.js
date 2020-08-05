@@ -237,7 +237,6 @@ app.get("/github-callback", function (req, res) {
         responseType: 'json'
     }).then(answer => {
         const auth = answer.body.access_token;
-        console.debug("First answer", answer.body);
         const scopes = answer.body.scope.split(',');
         if (!scopes.includes('read:user')) {
             res.status(202).send();
@@ -247,8 +246,7 @@ app.get("/github-callback", function (req, res) {
             headers: { Authorization: 'token ' + auth },
             responseType: 'json'
         }).then(answer => {
-            console.debug("Second answer", answer.body);
-            console.log(`GitHub Authentification success - user ${null}`);
+            console.log(`GitHub Authentification success - user ${answer.body.login}`);
             const acc = {
                 username: answer.body.name,
                 email: answer.body.email,
