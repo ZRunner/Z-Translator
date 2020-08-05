@@ -244,14 +244,16 @@ app.get("/github-callback", function (req, res) {
             return;
         }
         got("https://api.github.com/user", {
-            headers: { token: auth }
+            headers: { Authorization: 'token '+auth }
         }).then(answer => {
             console.debug("Second answer",answer);
             console.log(`GitHub Authentification success - user ${null}`);
             res.status(202).send();
+        }).catch(err => {
+            console.warn(`GitHub Authentification failure (2) - ${err}`);
         })
     }).catch(err => {
-        console.warn(`GitHub Authentification failure - ${err}`);
+        console.warn(`GitHub Authentification failure (1) - ${err}`);
     })
 })
 
