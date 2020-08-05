@@ -62,7 +62,7 @@ function main() {
         if (!Data.ws) return;
         if (Data.ws.readyState !== 1) return;
         Data.ws.send("heartbeat");
-        setTimeout(heartbeat, 500);
+        setTimeout(heartbeat, 30000);
     };
 
     Data.ws.addEventListener('open', ev => {
