@@ -188,7 +188,23 @@ app.get("/project/:id", function (req, res) {
     res.render("project", { account: req.session.account, project_name: project.name, level: 1 });
 })
 
+app.get("/admin", function (req, res) {
+    if (!req.session.account || !req.session.account.admin) {
+        res.redirect("signin");
+        return;
+    }
+    res.render("admin", { account: req.session.account, level: 0 });
+})
 
+app.post("/admin/reboot", function (req, res) {
+    if (!req.session.account || !req.session.account.admin) {
+        res.redirect("signin");
+        return;
+    };
+    console.log("Asked to restart by", req.session.account.nickname);
+    server.close();
+    process.exit();
+})
 
 // ----- API PART ----- //
 
@@ -215,7 +231,7 @@ app.post("/minecraft-signup", function (req, res) {
             email: possible_email.indexOf("@") > 0 ? possible_email : null,
             minecraft_uuid: profile.id,
             minecraft_name: profile.name,
-            avatar_url: "https://crafatar.com/avatars/"+profile.id
+            avatar_url: "https://crafatar.com/avatars/" + profile.id
         })
     }).catch(err => {
         console.warn(`Minecraft Authentification failure - ${err}`);
@@ -352,7 +368,7 @@ try {
     process.exit(1);
 }
 
-app.listen(PORT_USED, function () {
+var server = app.listen(PORT_USED, function () {
     WSManager.init(expressWs);
     console.log(`Z-Translator V${VERSION} listening on port ${PORT_USED}!`);
 })

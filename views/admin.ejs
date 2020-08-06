@@ -1,0 +1,29 @@
+<html lang="en">
+
+<head>
+    <%- include('../partials/head') %>
+    <title>Z-Translator - Admin Panel</title>
+    <style>
+        #title {
+            margin: 3% 0 15px 5%;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/navbar') %>
+
+    <h1 id="title">Administrator Panel</h1>
+
+    <div class="jumbotron">
+        <form action="admin/reboot" method="POST">
+            <button type="submit" class="btn btn-danger">Reboot</button>
+        </form>
+
+        <a href="http://137.74.246.110:8080/" class="btn btn-success">Access to database</a>
+    </div>
+
+
+</body>
+
+</html>

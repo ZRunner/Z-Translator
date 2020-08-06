@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `minecraft-name` TEXT,
   `minecraft-uuid` TEXT UNIQUE,
   `discord-id` BIGINT UNIQUE,
-  `github-name` TEXT UNIQUE
+  `github-name` TEXT UNIQUE,
+  `admin` BOOLEAN DEFAULT 0
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_accounts_email ON `users` (`email`);
 CREATE INDEX IF NOT EXISTS idx_accounts_nickname ON `users` (`nickname`);
