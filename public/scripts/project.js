@@ -36,10 +36,17 @@ function select_lang(lang) {
     Data.ws.send(msg("load-language", { "language": lang }))
 }
 
+// Click on "Copy" button
 function copysource() {
     const txt = $("#tr-origin-txt").text();
     $("#tr-translated-txt").val(txt);
     edit_history(txt);
+}
+
+// Click on "Pass" button
+function pass() {
+    const next = $("a.tr-string.selected").next();
+    if (next[0]) display_hash(next[0].getAttribute("href"));
 }
 
 window.addEventListener('popstate', function (event) {
@@ -73,6 +80,7 @@ function display_hash(hash) {
     $(`a.tr-string.selected`).removeClass("selected");
     $(`a.tr-string[href$="${hash}"]`).addClass("selected");
     // scroll to selected
+    $('#tr-left').stop(); // if it was already scrolling
     $('#tr-left').animate({
         scrollTop: $("a.tr-string.selected").position().top + $("#tr-left").scrollTop() - 20
     }, 800);
