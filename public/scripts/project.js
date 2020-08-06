@@ -1,6 +1,14 @@
 let new_uri = (window.location.protocol === "https:") ? "wss:" : "ws:";
 new_uri += `//${window.location.host}${window.location.pathname.replace("/project/", "/project-ws/")}`
-var Data = {};
+var Data = {
+    current_lang: null,
+    ws: null,
+    translations: [],
+    project: null,
+    languages: [],
+    history : {},
+    current_key: null
+};
 
 function msg(message, data) {
     if (data === undefined || data === null) {
@@ -29,12 +37,29 @@ function select_lang(lang) {
 }
 
 function copysource() {
-    $("#tr-translated-txt").val($("#tr-origin-txt").text());
+    const txt = $("#tr-origin-txt").text();
+    $("#tr-translated-txt").val(txt);
+    edit_history(txt);
 }
 
 window.addEventListener('popstate', function (event) {
     // The URL changed...
-    display_hash(window.location.hash)
+    display_hash(window.location.hash);
+});
+
+document.addEventListener('keydown', function (event) {
+    if (event.metaKey && event.key === 'z') {
+        if ($('#tr-panel').hasClass("d-none")) return;
+        if ($("#tr-translated-txt").is(":focus")) return;
+        const h = Array.from(Data.history[Data.current_key]).reverse();
+        if (!h || h.length <= 1) return;
+        for (let [i, txt] of h.entries()) {
+            if (txt == $('#tr-translated-txt').val()) continue;
+            $('#tr-translated-txt').val(txt);
+            Data.history[Data.current_key].splice(h.length-i);
+            break;
+        } 
+    }
 });
 
 function display_hash(hash) {
@@ -43,6 +68,7 @@ function display_hash(hash) {
     if (obj.length === 0) return;
     obj = obj[0];
     if ($(`a.tr-string[href$="${hash}"]`).length == 0) return;
+    Data.current_key = hash.substring(1);
     // edit "selected" case
     $(`a.tr-string.selected`).removeClass("selected");
     $(`a.tr-string[href$="${hash}"]`).addClass("selected");
@@ -53,13 +79,21 @@ function display_hash(hash) {
     // display translations
     $("#tr-origin-txt").text(obj.origin);
     $("#tr-translated-txt").val(obj.translation);
+    edit_history(obj.translation);
     $("#tr-origin-footer>span:nth-child(2)").text(obj.origin.length);
     $("#tr-origin-footer>span:nth-child(3)").text(obj.translation.length);
-    const div = obj.origin.length/obj.translation.length;
+    const div = obj.origin.length / obj.translation.length;
     if (0.7 < div && div < 1.3)
         $("#tr-origin-footer").removeClass("alert");
     else
         $("#tr-origin-footer").addClass("alert");
+}
+
+function edit_history(val) {
+    if (!Data.history[Data.current_key])
+        Data.history[Data.current_key] = [val]
+    else
+        Data.history[Data.current_key].push(val);
 }
 
 
@@ -68,6 +102,10 @@ function main() {
     // return;
     display_section('loading');
     $('.need-tl').tooltip();
+    $('#tr-translated-txt').on('input', e => {
+        edit_history(e.target.value);
+    })
+
     Data.ws = new WebSocket(new_uri);
 
     function heartbeat() {
@@ -139,6 +177,7 @@ function main() {
             // display current language
             $("#tr-area>h5>span").text(Data.languages[body.data.language]);
             if (window.location.hash) display_hash(window.location.hash);
+            else window.location.hash = "#"+Data.translations[0].key;
         }
         else {
             console.log("WS: unhandled message")
