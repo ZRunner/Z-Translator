@@ -71,6 +71,7 @@ body {
     min-width: 150px;
     padding: 1% 0%;
     overflow: auto;
+    flex-shrink: 0;
     user-select: none;
     scrollbar-color: rgba(255, 255, 255, .8) transparent;
 }
