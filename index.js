@@ -214,7 +214,8 @@ app.post("/minecraft-signup", function (req, res) {
             username: profile.name,
             email: possible_email.indexOf("@") > 0 ? possible_email : null,
             minecraft_uuid: profile.id,
-            minecraft_name: profile.name
+            minecraft_name: profile.name,
+            avatar_url: "https://crafatar.com/avatars/"+profile.id
         })
     }).catch(err => {
         console.warn(`Minecraft Authentification failure - ${err}`);
