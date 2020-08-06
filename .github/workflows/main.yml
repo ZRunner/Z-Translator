@@ -53,3 +53,8 @@ jobs:
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           data: "{'content': 'New build successfully deployed!'}"
+      - name: Webhook
+        uses: zzzze/webhook-trigger@master
+        with:
+          data: "{'content': 'New build successfully deployed 2!'}"
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
