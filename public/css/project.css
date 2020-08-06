@@ -1,3 +1,14 @@
+body {
+    padding-top: 0;
+}
+
+#global-div {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: 60px;
+}
+
 #title {
     margin: 3% 0 15px 5%;
 }
@@ -17,7 +28,7 @@
     right: 0;
     top: 180px;
     display: grid;
-    padding: 2% 3%;
+    flex: 1;
 }
 
 #mainzone.full {
@@ -49,7 +60,8 @@
 
 #tr-panel {
     /* background-color: rebeccapurple; */
-    /*! display: flex; */
+    display: flex;
+    overflow: hidden;
     width: 100%;
 }
 
@@ -59,37 +71,27 @@
     min-width: 150px;
     padding: 1% 0%;
     overflow: auto;
-    /*! height: 100%; */
-    /*! position: absolute; */
     user-select: none;
     scrollbar-color: rgba(255, 255, 255, .8) transparent;
-    /*! flex-basis: 15%; */
-    /*! height: 400px; */
-    float: left;
 }
 
 #tr-right {
-    background-color: saddlebrown;
+    /* background-color: saddlebrown; */
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    /*! position: absolute; */
+    overflow: auto;
+    scrollbar-color: rgb(255, 255, 255) #5cd65c;
 }
 
 #tr-origin {
     background-color: #adebad;
-    /*! display: flex; */
-    /* flex-basis: 40%; */
-    /*! flex-grow: 1; */
     min-height: 200px;
 }
 
 #tr-area {
     background-color: #5cd65c;
-    /*! display: flex; */
-    /* flex-basis: 40%; */
     min-height: 200px;
-    /*! flex-grow: 1; */
     flex-direction: column;
 }
 
@@ -131,7 +133,7 @@
     color: #5c9900;
 }
 
-#tr-origin>h5>span, #tr-area>h5>span  {
+#tr-origin>h5>span, #tr-area>h5>span {
     font-size: smaller;
     color: #003366;
 }

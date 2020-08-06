@@ -10,42 +10,46 @@
 <body onload="main()">
     <%- include('../partials/navbar') %>
 
-    <h1 id="title">Translate - <%= project_name %></h1>
+    <div id="global-div">
+        <h1 id="title">Translate - <%= project_name %></h1>
 
-    <div id="mainzone">
-        <div id="loading" class="section d-none">
-            <div class="spinner-border text-success" role="status" aria-hidden="true"></div>
-            Loading...
-        </div>
-
-        <div id="closed" class="section d-none">
-            <%- include('../partials/report_problem') %>
-            Connection to server has been closed
-        </div>
-
-        <div id="select-lang" class="section d-none">
-            <h4>Select a language to translate</h4>
-
-            <div id="langs-btn" class="btn-group-vertical" role="group">
-                <!-- <button type="button" class="btn btn-secondary">1</button> -->
+        <div id="mainzone">
+            <div id="loading" class="section d-none">
+                <div class="spinner-border text-success" role="status" aria-hidden="true"></div>
+                Loading...
             </div>
-        </div>
 
-        <div id="tr-panel" class="section d-none">
-            <div id="tr-left" class="d-none d-md-block">
-                <div id="tr-left-sum"><span>French</span> <span>100%</span></div>
-                <!-- <a class="tr-string valid selected">Protecting the land and scaring away creatures with this new potato launching device!</a> -->
+            <div id="closed" class="section d-none">
+                <%- include('../partials/report_problem') %>
+                Connection to server has been closed
             </div>
-            <div id="tr-right">
-                <div id="tr-origin">
-                    <h5>Original version <span></span></h5>
-                    <div id="tr-origin-txt">Protecting the land and scaring away creatures with this new potato launching device!</div>
+
+            <div id="select-lang" class="section d-none">
+                <h4>Select a language to translate</h4>
+
+                <div id="langs-btn" class="btn-group-vertical" role="group">
+                    <!-- <button type="button" class="btn btn-secondary">1</button> -->
                 </div>
-                <div id="tr-area">
-                    <h5>Translation into <span></span></h5>
-                    <div id="tr-translated-txt">Protégez votre terrain et effrayez les créatures avec ce nouveau dispositif de lancement de pommes de terre !</div>
-                    <button class="btn btn-secondary">Pass</button>
-                    <button class="btn btn-primary" disabled>Save</button>
+            </div>
+
+            <div id="tr-panel" class="section d-none">
+                <div id="tr-left" class="d-none d-md-block">
+                    <div id="tr-left-sum"><span>French</span> <span>100%</span></div>
+                    <!-- <a class="tr-string valid selected">Protecting the land and scaring away creatures with this new potato launching device!</a> -->
+                </div>
+                <div id="tr-right">
+                    <div id="tr-origin">
+                        <h5>Original version <span></span></h5>
+                        <div id="tr-origin-txt">Protecting the land and scaring away creatures with this new potato
+                            launching device!</div>
+                    </div>
+                    <div id="tr-area">
+                        <h5>Translation into <span></span></h5>
+                        <div id="tr-translated-txt">Protégez votre terrain et effrayez les créatures avec ce nouveau
+                            dispositif de lancement de pommes de terre !</div>
+                        <button class="btn btn-secondary">Pass</button>
+                        <button class="btn btn-primary" disabled>Save</button>
+                    </div>
                 </div>
             </div>
         </div>
