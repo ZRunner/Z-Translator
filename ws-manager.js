@@ -40,7 +40,7 @@ function init_ws(ws, req) {
 
     ws.on('message', function (message) {
         if (message == "heartbeat") {
-            console.debug("WS: got heartbeat from",ws.sessionid);
+            // console.debug("WS: got heartbeat from",ws.sessionid);
             ws.send("heartbeat back");
             return
         }
