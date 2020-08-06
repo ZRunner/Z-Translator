@@ -344,6 +344,13 @@ app.post("/edit-project/:id", function (req, res) {
 
 app.ws('/project-ws/:id', WSManager.init_ws);
 
+try {
+    DBmanager.db.readonly;
+} catch (err) {
+    console.error("Database is in readonly mode - exit");
+    process.exit(1);
+}
+
 app.listen(PORT_USED, function () {
     WSManager.init(expressWs);
     console.log(`Z-Translator V${VERSION} listening on port ${PORT_USED}!`);
