@@ -48,3 +48,8 @@ jobs:
           # local_path: './*' # default is ./*
           # files will copy to under remote_path
           remote_path: 'z-translator/' # default is /
+      - name: Webhook
+        uses: joelwmale/webhook-action@master
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          data: '{"content": "New build successfully deployed!"}'
