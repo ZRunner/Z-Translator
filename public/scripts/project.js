@@ -28,6 +28,10 @@ function select_lang(lang) {
     Data.ws.send(msg("load-language", { "language": lang }))
 }
 
+function copysource() {
+    $("#tr-translated-txt").val($("#tr-origin-txt").text());
+}
+
 window.addEventListener('popstate', function (event) {
     // The URL changed...
     display_hash(window.location.hash)
@@ -48,7 +52,14 @@ function display_hash(hash) {
     }, 800);
     // display translations
     $("#tr-origin-txt").text(obj.origin);
-    $("#tr-translated-txt").text(obj.translation);
+    $("#tr-translated-txt").val(obj.translation);
+    $("#tr-origin-footer>span:nth-child(2)").text(obj.origin.length);
+    $("#tr-origin-footer>span:nth-child(3)").text(obj.translation.length);
+    const div = obj.origin.length/obj.translation.length;
+    if (0.7 < div && div < 1.3)
+        $("#tr-origin-footer").removeClass("alert");
+    else
+        $("#tr-origin-footer").addClass("alert");
 }
 
 
@@ -56,6 +67,7 @@ function main() {
     // display_section('tr-panel');
     // return;
     display_section('loading');
+    $('.need-tl').tooltip();
     Data.ws = new WebSocket(new_uri);
 
     function heartbeat() {

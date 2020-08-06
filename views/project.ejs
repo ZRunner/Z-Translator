@@ -40,15 +40,19 @@
                 <div id="tr-right">
                     <div id="tr-origin">
                         <h5>Original version <span></span></h5>
-                        <div id="tr-origin-txt">Protecting the land and scaring away creatures with this new potato
-                            launching device!</div>
+                        <div id="tr-origin-txt"></div>
+                        <div id="tr-origin-footer">
+                            <button class="btn btn-secondary btn-sm need-tl" data-title="Copy Source" onclick="copysource()"><%- include("../partials/arrow_downward") %> </button>
+                            <span class="need-tl" data-title="Source string length">50</span>|<span class="need-tl" data-title="Translation string length">100</span>
+                        </div>
                     </div>
                     <div id="tr-area">
                         <h5>Translation into <span></span></h5>
-                        <div id="tr-translated-txt">Protégez votre terrain et effrayez les créatures avec ce nouveau
-                            dispositif de lancement de pommes de terre !</div>
+                        <textarea id="tr-translated-txt" class="form-control"></textarea>
+                        <div id="tr-translated-footer">
                         <button class="btn btn-secondary">Pass</button>
                         <button class="btn btn-primary" disabled>Save</button>
+                        </div>
                     </div>
                 </div>
             </div>

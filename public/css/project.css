@@ -17,6 +17,9 @@ body {
     #title {
         font-size: 32px;
     }
+    #tr-translated-txt {
+        height: 55%;
+    }
 }
 
 #mainzone {
@@ -29,6 +32,7 @@ body {
     top: 180px;
     display: grid;
     flex: 1;
+    padding: 1% 2%;
 }
 
 #mainzone.full {
@@ -142,4 +146,35 @@ body {
 
 #tr-origin>h5, #tr-area>h5 {
     margin-left: 1%;
+}
+
+#tr-origin-txt, #tr-translated-txt {
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: lighter;
+}
+
+#tr-origin-txt {
+    margin: 2% 3% 2% 2%;
+}
+
+#tr-translated-txt {
+    margin: 1.5% 2%;
+    width: 96%;
+    resize: none;
+}
+
+#tr-origin-footer, #tr-translated-footer {
+    margin-left: 2%;
+}
+
+#tr-origin-footer>button {
+    fill: white
+}
+
+#tr-origin-footer {
+    color: darkslategray;
+}
+
+#tr-origin-footer.alert {
+    color: darkred;
 }
