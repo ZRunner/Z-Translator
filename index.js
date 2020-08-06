@@ -161,7 +161,7 @@ app.get("/project-creation", function (req, res) {
 
 app.get("/edit-project/:id", function (req, res) {
     if (!req.session.account) {
-        res.redirect("/signin");
+        res.redirect("../signin");
         return;
     }
     let l = Array.from(DBmanager.languages.entries(), v => {
@@ -177,7 +177,7 @@ app.get("/edit-project/:id", function (req, res) {
 
 app.get("/project/:id", function (req, res) {
     if (!req.session.account) {
-        res.redirect("/signin");
+        res.redirect("../signin");
         return;
     }
     if (!DBmanager.project_is_valid(req.params.id)) {
