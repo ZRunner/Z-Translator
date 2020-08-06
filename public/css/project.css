@@ -88,12 +88,13 @@ body {
 #tr-origin {
     background-color: #adebad;
     min-height: 200px;
+    flex-grow: 1;
 }
 
 #tr-area {
     background-color: #5cd65c;
     min-height: 200px;
-    flex-direction: column;
+    flex-grow: 1;
 }
 
 #tr-left-sum {
