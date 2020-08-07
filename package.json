@@ -34,6 +34,7 @@
     "express-ws": "^4.0.0",
     "got": "^11.5.0",
     "mysql": "^2.18.1",
+    "replace-in-file": "^6.1.0",
     "simple-git": "^2.12.0"
   }
 }

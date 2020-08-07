@@ -25,7 +25,6 @@ function msg(message, code, data) {
 
 function send_all(message, check) {
     let clients = Array.from(expressWs.getWss().clients);
-    console.debug(clients);
     if (clients.length == 0) return;
     try {
         if (check) clients = clients.filter(check);
@@ -50,14 +49,14 @@ function init_ws(ws, req) {
     ws.projectid = req.params.id;
     ws.sessionid = req.session.id;
     ws.language = null;
-    console.debug(`WS: New connection to project ${ws.projectid} with session ${ws.sessionid}`);
+    console.log(`WS: New connection to project ${ws.projectid} with session ${ws.sessionid}`);
 
     ws.on('error', function (err) {
         console.warn(`WS: Error for session ${ws.sessionid}:\n ${err}`);
     });
 
     ws.on('close', function (code, reason) {
-        console.debug(`WS: closed because of ${reason} (${code})`);
+        console.log(`WS: closed because of ${reason} (${code})`);
         send_all(msg("user-left", 606, {
             username: req.session.account.nickname,
             lang: ws.language
@@ -95,6 +94,13 @@ function init_ws(ws, req) {
                 return;
             }
         } else if (body.code == 605) {
+            try {
+                DBmanager.add_historic(ws.projectid, ws.language, req.session.account.id, body.data.key, body.data.value);
+                DBmanager.replace_translation(ws.language, ws.projectid, body.data.key, body.data.value);
+            } catch (err) {
+                console.error(err);
+                return;
+            }
             // tell to everyone that a new translation has been added
             send_all(msg("new-translation", 604, {
                 key: body.data.key,

@@ -1,6 +1,7 @@
 const DB = require('better-sqlite3-helper');
 const simpleGit = require('simple-git');
 const fs = require('fs');
+const replace = require('replace-in-file');
 const { isNullOrUndefined } = require('util');
 
 class DatabaseManager {
@@ -184,6 +185,28 @@ class DatabaseManager {
                 translation: translation.get(key)
             }
         })
+    }
+
+    add_historic(projectid, language, authorid, key, value) {
+        return this.db.insert('historic', {
+            project: projectid,
+            language: language,
+            author: authorid,
+            key: key,
+            'new-value': value
+        });
+    }
+
+    replace_translation(language, projectid, key, newvalue) {
+        let filepath = this.get_languagesFiles(projectid, language);
+        if (filepath.length == 0) throw Error("Unknown language");
+        else filepath = filepath[0];
+        newvalue = newvalue.replace(/\n/g, "\\n");;
+        replace.sync({
+            files: filepath,
+            from: new RegExp(`^(${key} ?= ?).+`, 'm'),
+            to: "$1" + newvalue,
+        });
     }
 
 }
