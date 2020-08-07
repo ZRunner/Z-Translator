@@ -364,7 +364,8 @@ app.ws('/project-ws/:id', WSManager.init_ws);
 try {
     DBmanager.db.readonly;
 } catch (err) {
-    console.error("Database is in readonly mode - exit");
+    console.debug(err);
+    console.error("Database is unreachable - exit");
     process.exit(1);
 }
 
