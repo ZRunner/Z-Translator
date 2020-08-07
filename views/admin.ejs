@@ -7,6 +7,10 @@
         #title {
             margin: 3% 0 15px 5%;
         }
+
+        #version {
+            margin-left: 2%;
+        }
     </style>
 </head>
 
@@ -15,6 +19,7 @@
 
     <h1 id="title">Administrator Panel</h1>
 
+    <small id="version">App version <%= version %></small>
     <div class="jumbotron">
         <form action="admin/reboot" method="POST">
             <button type="submit" class="btn btn-danger">Reboot</button>
