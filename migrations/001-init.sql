@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `minecraft-uuid` TEXT UNIQUE,
   `discord-id` BIGINT UNIQUE,
   `github-name` TEXT UNIQUE,
-  `admin` BOOLEAN DEFAULT 0
+  `admin` BOOLEAN DEFAULT 0,
+  `theme` SMALLINT DEFAULT 0
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_accounts_email ON `users` (`email`);
 CREATE INDEX IF NOT EXISTS idx_accounts_nickname ON `users` (`nickname`);
@@ -39,6 +40,17 @@ CREATE TABLE IF NOT EXISTS `authorizations` (
   `languages` TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_authorizations_project ON `authorizations` (`project`);
+
+CREATE TABLE IF NOT EXISTS `historic` (
+  `project` INTEGER NOT NULL,
+  `language` VARCHAR(10) NOT NULL,
+  `author` INTEGER NOT NULL,
+  `key` VARCHAR(200) NOT NULL,
+  `new-value` TEXT NOT NULL,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_historic_project ON `historic` (`project`);
+CREATE INDEX IF NOT EXISTS idx_historic_author ON `historic` (`author`);
  
 -- Down 
 -- DROP TABLE IF EXISTS `users`;
