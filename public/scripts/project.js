@@ -6,15 +6,15 @@ var Data = {
     translations: [],
     project: null,
     languages: [],
-    history : {},
-    current_key: null
+    history: {},
+    current_tr: null
 };
 
-function msg(message, data) {
+function msg(message, code, data) {
     if (data === undefined || data === null) {
         data = undefined;
     };
-    return JSON.stringify({ message: message, data: data });
+    return JSON.stringify({ message: message, code: code, data: data });
 }
 
 function isNullOrUndefined(arg) {
@@ -33,7 +33,7 @@ function display_section(id) {
 function select_lang(lang) {
     Data.current_lang = lang;
     display_section('loading');
-    Data.ws.send(msg("load-language", { "language": lang }))
+    Data.ws.send(msg("load-language", 603, { "language": lang }))
 }
 
 // Click on "Copy" button
@@ -49,6 +49,17 @@ function pass() {
     if (next[0]) display_hash(next[0].getAttribute("href"));
 }
 
+// Click on "Save" button
+function save() {
+    if ($("#tr-translated-txt").val() == Data.current_tr.translation) return;
+    if ($("#tr-translated-txt").val().trim().length == 0) return;
+    Data.ws.send(msg("new-translation", 605, {
+        lang: Data.current_lang,
+        key: Data.current_tr.key,
+        value: $("#tr-translated-txt").val()
+    }));
+}
+
 window.addEventListener('popstate', function (event) {
     // The URL changed...
     display_hash(window.location.hash);
@@ -58,14 +69,14 @@ document.addEventListener('keydown', function (event) {
     if (event.metaKey && event.key === 'z') {
         if ($('#tr-panel').hasClass("d-none")) return;
         if ($("#tr-translated-txt").is(":focus")) return;
-        const h = Array.from(Data.history[Data.current_key]).reverse();
+        const h = Array.from(Data.history[Data.current_tr.key]).reverse();
         if (!h || h.length <= 1) return;
         for (let [i, txt] of h.entries()) {
             if (txt == $('#tr-translated-txt').val()) continue;
             $('#tr-translated-txt').val(txt);
-            Data.history[Data.current_key].splice(h.length-i);
+            Data.history[Data.current_tr.key].splice(h.length - i);
             break;
-        } 
+        }
     }
 });
 
@@ -75,7 +86,7 @@ function display_hash(hash) {
     if (obj.length === 0) return;
     obj = obj[0];
     if ($(`a.tr-string[href$="${hash}"]`).length == 0) return;
-    Data.current_key = hash.substring(1);
+    Data.current_tr = Data.translations.filter(e => e.key == hash.substring(1))[0];
     // edit "selected" case
     $(`a.tr-string.selected`).removeClass("selected");
     $(`a.tr-string[href$="${hash}"]`).addClass("selected");
@@ -98,10 +109,10 @@ function display_hash(hash) {
 }
 
 function edit_history(val) {
-    if (!Data.history[Data.current_key])
-        Data.history[Data.current_key] = [val]
+    if (!Data.history[Data.current_tr.key])
+        Data.history[Data.current_tr.key] = [val]
     else
-        Data.history[Data.current_key].push(val);
+        Data.history[Data.current_tr.key].push(val);
 }
 
 
@@ -143,8 +154,8 @@ function main() {
         }
         console.log("WS: new message", body);
 
-        // First connection
-        if (body.message == "connected") {
+        // First connection (connected)
+        if (body.code == 607) {
             Data.languages = body.data.languages;
             Data.project = body.data.project;
             $("#langs-btn").empty();
@@ -155,8 +166,9 @@ function main() {
             }
             display_section('select-lang');
             $("#tr-origin>h5>span").text(Data.languages[Data.project['origin-lang']]);
-        } // starting translation for a language
-        else if (body.message == "load-language") {
+        }
+        // starting translation for a language (load-language)
+        else if (body.code == 602) {
             let done = 0;
             // sort by done/not done
             body.data.translations.sort((a, b) => {
@@ -185,7 +197,16 @@ function main() {
             // display current language
             $("#tr-area>h5>span").text(Data.languages[body.data.language]);
             if (window.location.hash) display_hash(window.location.hash);
-            else window.location.hash = "#"+Data.translations[0].key;
+            else window.location.hash = "#" + Data.translations[0].key;
+        }
+        // New translation validated (new-translation)
+        else if (body.code == 604) {
+            const obj = Data.translations.filter(e => e.key == body.data.key)[0];
+            Data.translations[Data.translations.indexOf(obj)].translation = body.data.value;
+            if (Data.current_tr.key == body.data.key) {
+                $("#tr-translated-txt").val(body.data.value);
+                Data.history[Data.current_tr.key] = [body.data.value];
+            }
         }
         else {
             console.log("WS: unhandled message")
