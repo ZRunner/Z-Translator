@@ -193,7 +193,7 @@ app.get("/admin", function (req, res) {
         res.redirect("signin");
         return;
     }
-    res.render("admin", { account: req.session.account, version: VERSION, level: 0 });
+    res.render("admin", { account: req.session.account, version: VERSION, dburl: credentials["db_website"], level: 0 });
 })
 
 app.post("/admin/reboot", function (req, res) {

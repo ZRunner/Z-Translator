@@ -6,8 +6,8 @@
   "scripts": {
     "start": "forever index.js --color",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webdb": "sqlite_web data/sqlite3.db",
-    "webdb2": "sqlite_web -H 137.74.246.110 --no-browser data/sqlite3.db"
+    "webdb": "sqlite_web -P data/sqlite3.db",
+    "webdb2": "sqlite_web -H 137.74.246.110 -P --no-browser data/sqlite3.db"
   },
   "repository": {
     "type": "git",
