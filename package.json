@@ -26,15 +26,16 @@
   "homepage": "https://github.com/ZRunner/Z-Translator#readme",
   "dependencies": {
     "better-sqlite3-helper": "^3.1.0",
+    "bl": "^4.0.3",
     "connect-session-knex": "^1.7.3",
     "console-stamp": "^0.2.9",
-    "ejs": "^3.1.3",
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "express-ws": "^4.0.0",
-    "got": "^11.5.0",
+    "got": "^11.6.0",
     "mysql": "^2.18.1",
     "replace-in-file": "^6.1.0",
-    "simple-git": "^2.12.0"
+    "simple-git": "^2.20.1"
   }
 }
