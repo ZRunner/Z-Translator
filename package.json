@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/ZRunner/Z-Translator#readme",
   "dependencies": {
+    "better-sqlite3": "^7.5.0",
     "better-sqlite3-helper": "^3.1.0",
     "bl": "^4.0.3",
     "connect-session-knex": "^1.7.3",
