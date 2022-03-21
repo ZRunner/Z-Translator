@@ -37,6 +37,6 @@
     "got": "^11.6.0",
     "mysql": "^2.18.1",
     "replace-in-file": "^6.1.0",
-    "simple-git": "^2.20.1"
+    "simple-git": "^3.3.0"
   }
 }
